@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 #for redirect to dashboard
 def index(request):
-    return redirect('/dashboard')
+    return render(request , 'home.html',{})
 
 #the dashboard page
 def dashboard(request):
