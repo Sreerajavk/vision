@@ -57,6 +57,7 @@ def org_signup(request):
         phone_no = request.POST.get('phone_no')
         image = request.FILES.get('image')
         #creating organisation
+        print(username , password)
 
         # print(org_name , location)
         # print( org_id , email)
@@ -87,11 +88,14 @@ def login_fn(request):
         password = request.POST.get('password')
         print(username , password)
         # try:
-        u = authenticate(username = username , password = password )
+        # u = authenticate(username = username , password = password )
+        u = User.objects.filter(username = username , password = password)
+        # print(u)
         print(u)
         if u:
-            user = User.objects.get(username = u )
-            user_obj = UserDetails.objects.get(user = user.id )
+            # user = User.objects.get(username = u )
+            u = u.first()
+            user_obj = UserDetails.objects.get(user = u.id )
             if(user_obj.privilege == 1 ):
                 login(request , u)
                 return JsonResponse({'status' : 200 })
