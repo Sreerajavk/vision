@@ -64,7 +64,7 @@ def org_signup(request):
         # print(image)
         org_obj = Organisation.objects.get(id = org_id)
         try:
-            user_obj = User.objects.create(username = username , password = password , first_name = first_name , last_name = last_name , email = email)
+            user_obj = User.objects.create_user(username = username , password = password , first_name = first_name , last_name = last_name , email = email)
             user_obj.save()
             user_details_obj = UserDetails.objects.create(user = user_obj , org_id = org_obj , phone = phone_no , pic = image , privilege = 1)
             user_obj.save()
