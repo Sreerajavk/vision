@@ -1,0 +1,115 @@
+<!--Author: W3layouts
+Author URL: http://w3layouts.com
+License: Creative Commons Attribution 3.0 Unported
+License URL: http://creativecommons.org/licenses/by/3.0/
+-->
+<!DOCTYPE HTML>
+<html lang="zxx">
+
+<head>
+    <title>Organisation Signup</title>
+    <!-- Meta tag Keywords -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8"/>
+    <meta name="keywords"
+          content="Triple Forms Responsive Widget,Login form widgets, Sign up Web forms , Login signup Responsive web form,Flat Pricing table,Flat Drop downs,Registration Forms,News letter Forms,Elements"/>
+    <script>
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <!-- Meta tag Keywords -->
+    <link rel="stylesheet" href="/static/css/home/bootstrap.min.css">
+    <link rel="stylesheet" href="/static/css/dashboard/animate.css">
+
+    <!-- css files -->
+    <link rel="stylesheet" href="/static/css/Login/OrgLogin.css" type="text/css" media="all"/>
+
+    <!-- Style-CSS -->
+    <link href="/static/css/Login/font-awesome.min.css" rel="stylesheet">
+    <!-- Font-Awesome-Icons-CSS -->
+    <!-- //css files -->
+
+    <!-- web-fonts -->
+    <link href="//fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext"
+          rel="stylesheet">
+    <!-- //web-fonts -->
+</head>
+
+<body>
+<div class="main-bg">
+    <!-- title -->
+    <h1>Admin Login</h1>
+
+
+    <div class="main-content">
+
+        <!-- //title -->
+        <div class="sub-main-w3">
+            {#			<div class="image-style">#}
+            {##}
+            {#			</div>#}
+            <!-- vertical tabs -->
+            <div class="vertical-tab">
+                <div  class="section-w3ls">
+                        <form id="login_form" method="post">
+                            {% csrf_token %}
+                            <h3 class="legend">Admin Login</h3>
+                            <div class="alert alert-danger alert-dismissible fade show fadeIn animated"
+                                 role="alert"
+                                 style="margin-top: 20px;display: none" id="alert">
+                                <strong id="warning_text"></strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="input">
+                                <span class="fa fa-user-o" aria-hidden="true"></span>
+                                <input type="text" placeholder="Username" name="username" id="username" required/>
+                            </div>
+                            <div class="input">
+                                <span class="fa fa-key" aria-hidden="true"></span>
+                                <input type="password" placeholder="Password" name="password" id="password" required/>
+                            </div>
+                            <button type="submit" class="btn submit" id="login_bt">Login</button>
+                        </form>
+
+                </div>
+                {#				<div id="section3" class="section-w3ls">#}
+                {#					<input type="radio" name="sections" id="option3">#}
+                {#					<label for="option3" class="icon-left-w3pvt"><span class="fa fa-lock" aria-hidden="true"></span>Forgot Password?</label>#}
+                {#					<article>#}
+                {#						<form action="#" method="post">#}
+                {#							<h3 class="legend last">Reset Password</h3>#}
+                {#							<p class="para-style">Enter your email address below and we'll send you an email with instructions.</p>#}
+                {#							<p class="para-style-2"><strong>Need Help?</strong> Learn more about how to <a href="#">retrieve an existing#}
+                {#									account.</a></p>#}
+                {#							<div class="input">#}
+                {#								<span class="fa fa-envelope-o" aria-hidden="true"></span>#}
+                {#								<input type="email" placeholder="Email" name="email" required />#}
+                {#							</div>#}
+                {#							<button type="submit" class="btn submit last-btn">Reset</button>#}
+                {#						</form>#}
+                {#					</article>#}
+                {#				</div>#}login/
+            </div>
+            <!-- //vertical tabs -->
+            {#            <div class="clear"></div>#}
+        </div>
+    </div>
+</div>
+
+</body>
+<script src="/static/js/dashboard/jquery-1.12.4.min.js"></script>
+<script src="/static/js/fetch/Login.js"></script>
+<script src="/static/js/fetch/bootstrap.bundle.js"></script>
+
+<script>
+
+</script>
+
+</html>

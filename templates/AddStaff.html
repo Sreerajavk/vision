@@ -1,0 +1,62 @@
+{% extends 'dashboard.html' %}
+
+
+
+{% block title %}
+    <title>Add Staff</title>
+{% endblock %}
+
+{% block content %}
+{#        <link rel="stylesheet" href="/static/css/home/bootstrap4.css">#}
+{#        <link rel="stylesheet" href="/static/css/home/bootstrap.min.css">#}
+
+
+    <div class="password-meter-area mg-tb-15" style="margin-top: 100px">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div style="display: flex;justify-content: center">
+                    <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
+                        <div class="alert alert-success alert-dismissible fade  fadeIn animated"
+                             role="alert"
+                             style="display: none" id="alert">
+                            <strong id="warning_text"></strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="sparkline12-list responsive-mg-b-30">
+                            <div class="sparkline12-hd">
+                                <div class="main-sparkline12-hd" style="text-align: center;margin-bottom: 30px;">
+                                    <h1>Add Staff <span class="password-mt-none"></span></h1>
+                                </div>
+                            </div>
+                            <div class="sparkline12-graph">
+                                <form id="staff_form" method="post">
+                                    {% csrf_token %}
+                                    <div id="pwd-container1">
+                                        <div class="form-group">
+                                            <label for="password1">Email</label>
+                                            <input type="email" class="form-control example1" id="email"
+                                                   placeholder="Email" name="email">
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="pwstrength_viewport_progress"></div>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-outline-light" type="submit" id="send_bt">Send Invite Link <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span></button>
+                                </form>
+{#                                  <img src="{{ pic.url }}">#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script src="/static/js/fetch/AddStaff.js"></script>
+
+{% endblock %}

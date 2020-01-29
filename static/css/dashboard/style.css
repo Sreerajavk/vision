@@ -950,6 +950,7 @@ ul.breadcome-menu li a:hover{
 .product-sales-chart, .analytics-info-cs, .tranffic-als-inner, .analytics-rounded, .single-new-trend, .personal-info-wrap, .author-widgets-single, .calender-inner, .product-status-wrap, .review-tab-pro-inner, .income-dashone-total, .analytics-nalika-wrap, .analytics-sparkle-line, .analysis-progrebar, .sparkline8-list, .sparkline9-list, .sparkline7-list, .sparkline10-list, .sparkline12-list, .sparkline13-list, .sparkline14-list, .sparkline13-list, .sparkline11-list, .x-editable-list, .code-editor-single, .blog-details-inner, .charts-single-pro, .about-sparkline, .sparkline-list, .button-ad-wrap, .tab-content-details, .sparkline16-list, .sparkline15-list, .tinymce-single{
 	padding:20px;
 	background:#1b2a47;
+	border-radius: 15px;
 }
 .graph-rp{
 	text-align:right;
@@ -2913,7 +2914,10 @@ ul.mailbox-list li:hover a, ul.h-list li:hover a {
 }
 .main-sparkline8-hd h1, .main-sparkline9-hd h1, .main-spark7-hd h1, .main-sparkline10-hd h1, .main-sparkline11-hd h1, .main-sparkline12-hd h1, .main-sparkline13-hd h1, .main-sparkline14-hd h1{
 	font-size:20px;
-	color:#303030;
+	color:#fff;
+}
+.form-group > label{
+	color: #fff;
 }
 .basic-choropleth {
     height: 400px;
