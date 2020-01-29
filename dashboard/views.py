@@ -88,15 +88,18 @@ def login_fn(request):
         password = request.POST.get('password')
         print(username , password)
         # try:
-        # u = authenticate(username = username , password = password )
-        u = User.objects.filter(username = username , password = password)
+        u = authenticate(username = username , password = password )
+        # u = User.objects.filter(username = username , password = password)
         # print(u)
         print(u)
         if u:
-            # user = User.objects.get(username = u )
-            u = u.first()
-            user_obj = UserDetails.objects.get(user = u.id )
-            if(user_obj.privilege == 1 ):
+            # print('sdf')
+            # u = User.objects.filter(username=username)
+            user_obj = User.objects.get(username = u )
+            print(user_obj.id)
+            # u = u.first()
+            userdetails_obj = UserDetails.objects.get(user = user_obj.id )
+            if(userdetails_obj.privilege == 1 ):
                 login(request , u)
                 return JsonResponse({'status' : 200 })
             else:
