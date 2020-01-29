@@ -18,32 +18,12 @@ $('#login_form').submit(function (event) {
         method: 'post',
         datatype : 'json',
         data: data,
-        // {
-        //     username : username,
-        //     password : password,
-        //     csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken]').val()
-        // },
-        // data : {
-        //         org_name : org_name,
-        //         location : location,
-        //         email : email,
-        //         username : username,
-        //         first_name : first_name,
-        //         last_name : last_name,
-        //         password : password,
-        //         phone_no : phone_no,
-        //         image : formData,
-        //         csrfmiddlewaretoken : $('input[name=csrfmiddlewaretoken]').val()
-        // },
-        // contentType: false,
-        // cache: false,
-        // processData: false,
         success: function (response) {
 
             // alert(response.status)
 
             if (response.status == '200') {
-                window.location = '/dashboard'
+                window.location = '/dashboard/'
             } else if(response.status == '300') {
                 $('#warning_text').html('Unauthorised Access')
                 $('#alert').css('display', 'block')
