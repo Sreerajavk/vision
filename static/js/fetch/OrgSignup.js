@@ -30,7 +30,7 @@ $('#org_form2').submit(function (event) {
 
     console.log(data)
 
-    $('#register_bt').html('Signing Up <img src="/static/images/spinner2.gif" style="width: 30px;height: 30px;">');
+        $('#register_bt').html('Signing Up <img src="/static/images/spinner2.gif" id="spinner">');
 
     $.ajax({
         url: '/org-signup/',
@@ -57,7 +57,7 @@ $('#org_form2').submit(function (event) {
             // alert(response.status)
 
             if(response.status == '200'){
-                window.location = '/login'
+                window.location = '/login/'
             }
             else{
                 $('#warning_text').html('Username already exists')

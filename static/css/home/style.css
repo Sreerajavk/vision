@@ -626,13 +626,16 @@ background-size: cover;
 .contact-forms input, .contact-forms textarea {
 width: 100%;
 font-size: 14px;
-color: #fff;
+color: #fff!important;
 padding: .8em 0em;
 border: none;
 border-bottom: 1px solid #f1f1f1;
 border-radius: 0px;
 background: transparent !important;
 outline: none !important;
+}
+.contact-forms input:active, .contact-forms textarea:active {
+    color:#f00;
 }
 .contact-forms textarea {
 resize: none;
