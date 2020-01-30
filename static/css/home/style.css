@@ -207,12 +207,12 @@ color:#000;
 }
 .open nav {
 right: 0;
-} 
+}
 .open #menuToggle span {
 background: transparent;
 left: 20%;
 top: 45%;
-} 
+}
 .open #menuToggle span:before,
 .open #menuToggle span:after {
 background: white;
@@ -221,19 +221,19 @@ top: 0;
 -ms-transform: rotate(45deg);
 -webkit-transform: rotate(45deg);
 transform: rotate(45deg);
-} 
+}
 .open #menuToggle span:after {
 -moz-transform: rotate(-45deg);
 -ms-transform: rotate(-45deg);
 -webkit-transform: rotate(-45deg);
 transform: rotate(-45deg);
-} 
+}
 #menuToggle .navClosed {
 -moz-transition: background 0.1s linear;
 -o-transition: background 0.1s linear;
 -webkit-transition: background 0.1s linear;
 transition: background 0.1s linear;
-} 
+}
 #menuToggle .navClosed:before,
 #menuToggle .navClosed:after {
 -moz-transition: top 0.2s linear 0.1s, -moz-transform 0.2s linear 0.1s;
@@ -241,7 +241,7 @@ transition: background 0.1s linear;
 -webkit-transition: top 0.2s linear, -webkit-transform 0.2s linear;
 -webkit-transition-delay: 0.1s, 0.1s;
 transition: top 0.2s linear 0.1s, transform 0.2s linear 0.1s;
-} 
+}
 #menuToggle .navOpen {
 -moz-transition: background 0.1s linear 0.2s;
 -o-transition: background 0.1s linear 0.2s;
@@ -257,7 +257,7 @@ transition: background 0.1s linear 0.2s;
 transition: top 0.2s linear, transform 0.2s linear;
 }
 /*-- //menu-navigation --*/
-/*-- banner --*/ 
+/*-- banner --*/
 .hedder-up {
 padding: 10px 0px 0px;
 text-align: center;
@@ -266,7 +266,7 @@ text-align: center;
 .two-img{  background: url(../../images/b2.jpg)no-repeat center;}
 .three-img{  background: url(../../images/b3.jpg)no-repeat center;}
 .slider-img{  background-size: cover;
-min-height: 800px;}  
+min-height: 800px;}
 .rslides {
 position: relative;
 list-style: none;
@@ -686,7 +686,7 @@ border: none;
 font-size: 18px;
 color: #000;
 font-weight: 500;
-} 
+}
 .newsletter input[type="email"]::-webkit-input-placeholder { /* Chrome */
 color: #000;
 }
@@ -749,7 +749,7 @@ position: fixed;
 bottom: 20px;
 right: 2%;
 overflow: hidden;
-z-index: 999; 
+z-index: 999;
 width: 46px;
 height: 36px;
 border: none;
@@ -777,7 +777,7 @@ filter: alpha(opacity=0);
 @media(max-width:1440px){
 .slider-img {
 min-height: 680px;
-}	
+}
 .slider-info {
 padding: 12em 0 0;
 }
@@ -824,7 +824,7 @@ line-height: 33px;
 @media(max-width:1280px){
 nav a {
 font-size: 1.1em;
-margin: 30px 0 30px 21px;	
+margin: 30px 0 30px 21px;
 }
 nav {
 width: 180px;
@@ -880,7 +880,7 @@ line-height: 44px;
 }
 nav {
 width: 154px;
-}	
+}
 }
 @media(max-width:1050px){
 .callbacks_nav, .callbacks_nav.next {
@@ -901,7 +901,7 @@ font-size: 20px;
 }
 .contact-forms textarea {
 height: 9em;
-}	
+}
 }
 @media(max-width:1024px){
 .slider-img {
@@ -913,7 +913,7 @@ line-height: 56px;
 }
 .slider-info p {
 line-height: 27px;
-}	
+}
 .slider-info {
 padding: 10em 0 0;
 }
@@ -939,7 +939,7 @@ font-size: 31px;
 }
 .title {
 font-size: 32px;
-}	
+}
 .contact-forms input, .contact-forms textarea {
 padding: 0.7em 0em;
 }
@@ -987,7 +987,7 @@ letter-spacing: 1px;
 #menuToggle {
 top: 36px;
 width: 42px;
-}	
+}
 .fun-hedder-up h5 {
 font-size: 22px;
 padding: 0em 6em;
@@ -1013,7 +1013,7 @@ background-size: 27px;
 .outs_more-buttn a, .outs_about-buttn a {
 padding: 11px 13px;
 letter-spacing:1px;
-}	
+}
 .slider-info {
 padding: 9em 0 0;
 }
@@ -1059,7 +1059,7 @@ height: 7em;
 }
 .sent-butnn button {
 width: 30%;
-}	
+}
 }
 @media(max-width:736px){
 .fun-hedder-up h5 {
@@ -1068,7 +1068,7 @@ padding: 0em 5em;
 }
 .sent-butnn button {
 width: 33%;
-}	
+}
 }
 @media(max-width:667px){
 .slider-img {
@@ -1080,7 +1080,7 @@ line-height: 47px;
 }
 .slider-info p {
 font-size: 14px;
-}	
+}
 .about-agile-icon span, .banner-icon span {
 font-size: 32px;
 }
@@ -1089,7 +1089,7 @@ font-size: 32px;
 .title {
 font-size: 28px;
 letter-spacing: 1px;
-}	
+}
 .contact-forms input, .contact-forms textarea {
 padding: 0.6em 0em;
 }
@@ -1147,7 +1147,7 @@ min-height: 469px;
 .slider-info h5 {
 font-size: 1.8em;
 line-height: 34px;
-}	
+}
 .hedder-logo h1 a {
 font-size: 29px;
 }
@@ -1202,7 +1202,7 @@ font-size: 18px;
 }
 .profile {
 width: 80%;
-}	
+}
 .header-w3layouts {
 padding-top: 1em;
 }
@@ -1266,4 +1266,12 @@ font-size: 17px;
 .img-box > img{
     height: 250px;
     width: 230px;
+}
+
+@media (max-width: 480px) {
+    .img-box > img {
+        height: auto;
+        width: auto;
+    }
+
 }
