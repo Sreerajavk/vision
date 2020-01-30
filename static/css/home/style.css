@@ -1262,3 +1262,8 @@ font-size: 17px;
 }
 }
 /*--//responsive--*/
+
+.img-box > img{
+    height: 250px;
+    width: 230px;
+}
