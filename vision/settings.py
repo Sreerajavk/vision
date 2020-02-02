@@ -144,6 +144,7 @@ EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'sreesreeraj'
 EMAIL_HOST_PASSWORD = 'sreejith123'
+LOGIN_URL = '/login/'
 # EMAIL_USE_TLS = True
 
 # EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"

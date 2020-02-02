@@ -1,0 +1,88 @@
+{% extends 'dashboard.html' %}
+
+
+{% block content %}
+    <div class="static-table-area mg-t-15" style="margin-top: 100px;">
+        <div class="container-fluid">
+            <div class="row" style="color: #fff;">
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <div class="sparkline8-list">
+
+                        <div class="product-status-wrap">
+                            {% csrf_token %}
+                            <div class="filters">
+                                <div class="chosen-select-single mg-b-20 form-group">
+                                    <label>User Type</label>
+                                    <select class="select2_demo_3 form-control" name="option" id="option">
+                                        <option>Select</option>
+                                        <option value="0">Staff</option>
+                                        <option value="1">Candidates</option>
+                                    </select>
+                                </div>
+                                <div class="chosen-select-single mg-b-20 form-group">
+                                    <label>Basic Select</label>
+                                    <select class="select2_demo_3 form-control" name="option" id="option">
+                                        <option>Select</option>
+                                        <option value="0">Staff</option>
+                                        <option value="1">Candidates</option>
+                                    </select>
+                                </div>
+                                <div class="chosen-select-single mg-b-20 form-group">
+                                    <label>Basic Select</label>
+                                    <select class="select2_demo_3 form-control" name="option" id="option">
+                                        <option>Select</option>
+                                        <option value="0">Staff</option>
+                                        <option value="1">Candidates</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        {#                        <div class="sparkline8-graph">#}
+                        <div class="static-table-list">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Username</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>1</td>
+                                    <td>Mamun</td>
+                                    <td>Roshid</td>
+                                    <td>@Facebook</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>Suhag</td>
+                                    <td>Khan</td>
+                                    <td>@Twitter</td>
+                                </tr>
+                                <tr>
+                                    <td>3</td>
+                                    <td>Sakil</td>
+                                    <td>Shak</td>
+                                    <td>@Linkedin</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                        <div class="charts-single-pro responsive-mg-b-30">
+                            <div class="" style="color:#fff !important; ">
+                                <h4>User Analytics</h4>
+                            </div>
+                            <div id="basic-chart">
+                                <canvas id="basiclinechart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

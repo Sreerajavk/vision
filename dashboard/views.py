@@ -1,16 +1,19 @@
 import string
 
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail, EmailMessage
 from django.db.models import Max
-from django.http import JsonResponse
+from django.forms import modelformset_factory
+from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from django.template.loader import get_template
 from django.utils.crypto import get_random_string
 
+from .forms import ImageForm
 from .models import *
 
 # Create your views here.
@@ -81,6 +84,9 @@ def org_signup(request):
 
 @csrf_exempt
 def login_fn(request):
+
+    if(request.user.is_authenticated):
+        return redirect('/dashboard/')
 
     if(request.method == 'POST'):
         print(request.POST)
@@ -192,7 +198,7 @@ def staff_signup(request):
         org_id = request.POST.get('org_id')
         # location = request.POST.get('location')
         email = request.POST.get('email')
-        username = request.POST.get('username')
+        # username = request.POST.get('username')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         password = request.POST.get('password')
@@ -205,7 +211,7 @@ def staff_signup(request):
         # print(image)
         org_obj = Organisation.objects.get(id=org_id)
         try:
-            user_obj = User.objects.create(username=username, password=password, first_name=first_name,
+            user_obj = User.objects.create(username=email, password=password, first_name=first_name,
                                            last_name=last_name, email=email)
             user_obj.save()
             user_details_obj = UserDetails.objects.create(user=user_obj, org_id=org_obj, phone=phone_no, pic=image,
@@ -229,3 +235,184 @@ def staff_signup(request):
 def logout_fn(request):
     logout(request)
     return redirect('/login/')
+
+@login_required
+def upload_images(request):
+    # ImageFormSet = modelformset_factory(CandidatePics , form=ImageForm, extra=2)
+
+    if(request.method == 'POST'):
+        print(request.POST)
+        image = request.FILES.get('images')
+        user_id = request.POST.get('user_id')
+        edit = request.POST.get('edit')
+        user_obj  = User.objects.get(id = user_id)
+        pic_obj = CandidatePics.objects.create(user = user_obj , images = image )
+        user_details_obj = UserDetails.objects.get(user = user_obj)
+        print(user_details_obj.pic)
+        if(user_details_obj.pic == ''):
+            user_details_obj.pic = image
+            user_details_obj.save()
+        pic_obj.save()
+        return JsonResponse({'status' : 200 , 'edit' : edit})
+    return render(request , 'AddCandidate.html' , { 'pic' : get_pic(request)} )
+
+@login_required
+@csrf_exempt
+def add_candidates(request):
+
+    if(request.method == 'POST'):
+        org_id = request.POST.get('org_id')
+        # location = request.POST.get('location')
+        # email = request.POST.get('email')
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        # password = request.POST.get('password')
+        phone_no = request.POST.get('phone')
+
+        print(org_id , username , first_name , last_name , phone_no)
+
+        try:
+            org_obj = Organisation.objects.get(id = org_id)
+            u = User.objects.create_user(username = username , password = 'password' , first_name = first_name,last_name = last_name )
+            user_obj = UserDetails.objects.create(user = u , org_id = org_obj , phone = phone_no , privilege = 3)
+            return JsonResponse({'status': 200 , 'user_id' : u.id })
+        except:
+            return JsonResponse({'status' : 300})
+
+    user_obj = UserDetails.objects.get(user = request.user)
+    status = request.GET.get('status')
+    print(status)
+    return render(request ,'AddCandidate.html' , {'pic' : get_pic(request) ,'org_id' : user_obj.org_id , 'status': status })
+
+
+#delete and edit candidates and staff
+@login_required
+@csrf_exempt
+def manage(request):
+
+    if(request.method == 'POST'):
+        org_id = request.POST.get('org_id')
+        option = request.POST.get('option')
+        print(org_id , option)
+        data = {}
+        if(int(option) == 0 ):
+            staff_obj = UserDetails.objects.filter(privilege = 2 , org_id = org_id)
+            for staff in staff_obj:
+                dic = {}
+                dic['first_name'] = staff.user.first_name
+                dic['last_name'] = staff.user.last_name
+                dic['username'] = staff.user.username
+                dic['email'] = staff.user.email
+                dic['phone'] = staff.phone
+                dic['image_url'] =staff.pic.url
+                data[staff.user.id] = dic
+            flag = 1
+                # print(dic)
+            print(data)
+        else:
+            staff_obj = UserDetails.objects.filter(privilege=3, org_id=org_id)
+            for staff in staff_obj:
+                dic = {}
+                dic['first_name'] = staff.user.first_name
+                dic['last_name'] = staff.user.last_name
+                dic['username'] = staff.user.username
+                # dic['email'] = staff.user.email
+                dic['phone'] = staff.phone
+                dic['image_url'] = staff.pic.url
+                data[staff.user.id] = dic
+            flag=0
+                # print(dic)
+            print(data)
+        return JsonResponse({'data': data , 'status': 200 , 'flag': flag})
+
+
+    user_obj = UserDetails.objects.get(user = request.user)
+    status = request.GET.get('status')
+    return render(request , 'Manage.html' , {'pic' : get_pic(request),'org_id': user_obj.org_id , 'status': status})
+
+
+
+@csrf_exempt
+def delete_staff(request):
+
+    if(request.method == 'POST'):
+        print(request.POST)
+        id = request.POST.get('user_id')
+        type = request.POST.get('type')
+        org_id = request.POST.get('org_id')
+        # print(id , org_id , type)
+        User.objects.filter(id = id).delete()
+        org_obj = Organisation.objects.get(id = org_id )
+        if(int(type) == 0 ):
+            user_obj = UserDetails.objects.filter(org_id = org_obj , privilege = 3)
+        else:
+            user_obj = UserDetails.objects.filter(org_id=org_obj, privilege=2)
+        length = user_obj.count()
+        print(length)
+        return JsonResponse({'status': 200 , 'id' : id , 'length' : length})
+
+@login_required
+def edit_candidate(request,id):
+
+    if(request.method == 'POST'):
+        # print('In post')
+        # org_id = request.POST.get('org_id')
+        # location = request.POST.get('location')
+        # email = request.POST.get('email')
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        # password = request.POST.get('password')
+        phone_no = request.POST.get('phone')
+        id = request.POST.get('id')
+
+        user_obj = User.objects.get(id = id)
+        user_details_obj = UserDetails.objects.get(user = user_obj)
+        user_details_obj.phone = phone_no
+        user_obj.first_name = first_name
+        user_obj.last_name = last_name
+        user_obj.save()
+        user_details_obj.save()
+        pic_obj = CandidatePics.objects.filter(user = user_obj)
+        pic_list = []
+        for pic in pic_obj:
+            dic = {}
+            dic['id'] = pic.id
+            dic['image_url'] = pic.images.url
+            pic_list.append(dic)
+        return JsonResponse({'status': 200 , 'pic_list' : pic_list , 'name': first_name+' ' + last_name , 'user_id':id})
+
+
+    print(id)
+    # return HttpResponse('sldfkjsdlkf')
+    user = User.objects.filter(id = id )
+    if user:
+        user_obj = UserDetails.objects.get(user = user.first())
+        user = user.first()
+        dic = {}
+        dic['first_name'] = user.first_name
+        dic['last_name'] = user.last_name
+        dic['username'] = user.username
+        # dic['email'] = user.user.email
+        dic['id'] = id
+        dic['org_id'] = user_obj.org_id_id
+        dic['phone'] = user_obj.phone
+        return render(request, 'EditCandidates.html', {'data' : dic , 'pic':get_pic(request)})
+    else:
+
+        return render(request , '404.html' , {})
+
+
+@login_required
+def delete_images(request):
+
+    if(request.is_ajax()):
+        id = request.POST.get('id')
+        pic_obj = CandidatePics.objects.get(id = id)
+        pic_obj.delete()
+        return JsonResponse({'status': 200  , 'id' : id})
+
+@login_required
+def analytics(request):
+    return render(request , 'Analytics.html' , {'pic' : get_pic(request)})

@@ -1,0 +1,154 @@
+{% extends 'dashboard.html' %}
+
+{% block content %}
+
+    <div class="password-meter-area mg-tb-15" style="margin-top: 100px">
+        <div class="container-fluid">
+
+            <div class="row">
+                <div style="display: flex;justify-content: center">
+                    <div class="col-lg-8 col-md-8 col-sm-6 col-xs-12">
+
+                        {% if status is not None %}
+                            <div class="alert alert-success alert-dismissible fade  fadeIn animated"
+                                 role="alert"
+                                 style="display: block" id="alert">
+                                <strong id="warning_text">User information saved successfully</strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% else %}
+                            <div class="alert alert-danger alert-dismissible fade  fadeIn animated"
+                                 role="alert"
+                                 style="display: none" id="alert">
+                                <strong id="warning_text">User information saved successfully</strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endif %}
+
+
+                        <div class="sparkline12-list responsive-mg-b-30" id="div1">
+                            <div class="sparkline12-hd">
+                                <div class="main-sparkline12-hd" style="text-align: center;margin-bottom: 30px;">
+                                    <h1>Manage <span class="password-mt-none"></span></h1>
+                                </div>
+                            </div>
+                            <div class="sparkline12-graph">
+                                <form id="search_form" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" value="{{ org_id }}" id="org_id" name="org_id">
+                                    <div id="pwd-container1">
+                                        {#                                        <div class="form-group">#}
+                                        {#                                            <label for="password1">Candidates/staff</label>#}
+                                        {#                                            <select>#}
+                                        {#                                                <option>sdf</option>#}
+                                        {#                                                <option>sdfsd</option>#}
+                                        {#                                            </select>#}
+                                        {#                                        </div>#}
+                                        <div class="chosen-select-single mg-b-20 form-group">
+                                            <label>Basic Select</label>
+                                            <select class="select2_demo_3 form-control" name="option" id="option">
+                                                <option>Select</option>
+                                                <option value="0">Staff</option>
+                                                <option value="1">Candidates</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <button class="btn btn-outline-light" type="submit" id="search_bt">Search
+                                        <i class="fas fa-search"></i></button>
+                                </form>
+                                {#                                  <img src="{{ pic.url }}">#}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-status mg-b-30" style="margin-top: 50px;display: none" id="no_content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="product-status-wrap">
+                                <h4 style="text-align: center">No available Data</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-status mg-b-30" style="margin-top: 50px;display: none" id="div2">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="product-status-wrap">
+                                {% csrf_token %}
+                                <h4 id="div_head">Staff List</h4>
+                                {#                            <div class="add-product">#}
+                                {#                                <a href="product-edit.html">Add Product</a>#}
+                                {#                            </div>#}
+
+                                <table>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>Phone No</th>
+                                        <th>Manage</th>
+                                    </tr>
+                                    <tbody id="table_content">
+
+                                    </tbody>
+                                </table>
+                                {#                            <div class="custom-pagination">#}
+                                {#								<ul class="pagination">#}
+                                {#									<li class="page-item"><a class="page-link" href="#">Previous</a></li>#}
+                                {#									<li class="page-item"><a class="page-link" href="#">1</a></li>#}
+                                {#									<li class="page-item"><a class="page-link" href="#">2</a></li>#}
+                                {#									<li class="page-item"><a class="page-link" href="#">3</a></li>#}
+                                {#									<li class="page-item"><a class="page-link" href="#">Next</a></li>#}
+                                {#								</ul>#}
+                                {#                            </div>#}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="delete-model" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Confirm Delete</h5>
+                            <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </a>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure want to delete Member</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a class="btn btn-primary" data-dismiss="modal">Close</a>
+                            <a class="btn btn-danger delete-item">Delete<i class="fa fa-trash-alt"
+                                                                           style="margin-left:10px"></i> </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/fetch/Manage.js"></script>
+    {#    <script src="/static/js/dashboard/bootstrap.min.js"></script>#}
+    {#    <script src="/static/js/fileupload/jquery.ui.widget.js"></script>#}
+    {#    <script src="/static/js/fileupload/jquery.iframe-transport.js"></script>#}
+    {#    <script src="/static/js/fileupload/jquery.fileupload.js"></script>#}
+    {#    <script src="/static/js/fileupload/progress-bar-upload.js"></script>#}
+
+
+{% endblock %}
+
