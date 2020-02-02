@@ -68,8 +68,21 @@
                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <div class="charts-single-pro responsive-mg-b-30">
                         <div class="" style="color:#fff !important; ">
-                            <h4>User Analytics</h4>
+                            <div class="filters">
+                                <input type="hidden" id="user_id">
+                                <h4 id="analytic_head"> User Analytics</h4>
+                                <div class="chosen-select-single mg-b-20 form-group">
+{#                                    <label>User Type</label>#}
+                                    <select class="select2_demo_3 form-control" name="option" id="option_time">
+                                        <option disabled selected>Select</option>
+                                        <option value="month">Month</option>
+                                        <option value="day">Day</option>
+                                        <option value="hour">Hour</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
+                        <h3  class="no-content" id="no_content">No Available Data</h3>
                         <div id="basic-chart">
                             <canvas id="basiclinechart"></canvas>
                         </div>

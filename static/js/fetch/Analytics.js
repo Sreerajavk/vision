@@ -12,18 +12,8 @@ $(document.body).on('click', '#option_type', function (event) {
         success: function (response) {
 
             if (response.status == '200') {
-                console.log(response.user_list)
-                let table_content = document.getElementById('table_content');
-
-                $('#full_table').slideUp(500, function () {
-                    table_content.innerHTML = "";
-                    for (user of response.user_list) {
-                        let row = `<tr id="row${user.id}" class="table-row"><td>${user.count}</td><td>${user.name}</td><td><img src="${user.image_url}" id="table-image"></td><td>${user.privilege}</td>`
-                        table_content.innerHTML += row;
-                    }
-                    $('#full_table').slideDown(500)
-                })
-
+                console.log(response.user_list);
+                fill_table(response)
             }
         },
         fail: function (response) {
@@ -31,3 +21,137 @@ $(document.body).on('click', '#option_type', function (event) {
         }
     })
 })
+$(document.body).on('click', '.table-row', function (event) {
+
+    // let option = $('#option_type').val();
+    // alert(option)
+    id = ($(this).attr('id'));
+    // alert('sdfsdf')
+    $.ajax({
+        url: '/dashboard/get-analytics/',
+        datatype: 'json',
+        method: 'post',
+        data: {
+            id: id,
+            type : 'day'
+        },
+        success: function (response) {
+
+            if (response.status == '200') {
+                    fill_chart(response);
+                    console.log(response.data)
+                     $('#user_id').prop('value' , response.data.id);
+                    $('#no_content').removeClass('no-content');
+                    $("#no_content").html("");
+                    $('#analytic_head').html(response.data.name )
+            }
+        },
+        fail: function (response) {
+
+        }
+    })
+})
+
+
+$(document.body).on('click', '#option_time', function (event) {
+
+    // let option = $('#option_type').val();
+    // alert(option)
+    let id = $('#user_id').prop('value');
+    // alert(id)
+    // alert('sdfsdf')
+    $.ajax({
+        url: '/dashboard/get-analytics/',
+        datatype: 'json',
+        method: 'post',
+        data: {
+            id: id,
+            type : $(this).val()
+        },
+        success: function (response) {
+
+            if (response.status == '200') {
+                    fill_chart(response)
+                    $('#analytic_head').html(response.data.name )
+            }
+        },
+        fail: function (response) {
+
+        }
+    })
+})
+
+
+function fill_table(response) {
+    let table_content = document.getElementById('table_content');
+
+    $('#full_table').slideUp(500, function () {
+        table_content.innerHTML = "";
+        for (user of response.user_list) {
+            let row = `<tr id="${user.id}" class="table-row"><td>${user.count}</td><td>${user.name}</td><td><img src="${user.image_url}" id="table-image"></td><td>${user.privilege}</td>`
+            table_content.innerHTML += row;
+        }
+        $('#full_table').slideDown(500)
+    })
+}
+
+function fill_chart(response) {
+    var ctx = document.getElementById("basiclinechart");
+    var basiclinechart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: response.time_list,
+            datasets: [{
+                label: "Count",
+                fill: false,
+                backgroundColor: '#03a9f4',
+                borderColor: '#03a9f4',
+                data: response.count_list
+
+            }]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: false,
+                text: 'Basic Line Chart'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            scales: {
+                xAxes: [{
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 0
+                    },
+                    ticks: {
+                        fontColor: "#fff", // this here
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time'
+                    }
+                }],
+                yAxes: [{
+                    ticks: {
+                        autoSkip: false,
+                        maxRotation: 0
+                    },
+                    ticks: {
+                        fontColor: "#fff", // this here
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Count'
+                    }
+                }]
+            }
+        }
+    });
+}

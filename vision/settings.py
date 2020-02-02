@@ -145,6 +145,8 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'sreesreeraj'
 EMAIL_HOST_PASSWORD = 'sreejith123'
 LOGIN_URL = '/login/'
+TIME_ZONE =  'Asia/Kolkata'
+
 # EMAIL_USE_TLS = True
 
 # EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"

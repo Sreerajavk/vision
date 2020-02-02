@@ -968,6 +968,10 @@ ul.breadcome-menu li a:hover{
 	justify-content: space-between;
 
 }
+.no-content{
+	padding-top: 50px;
+	text-align: center;
+}
 .graph-rp{
 	text-align:right;
 }

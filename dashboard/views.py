@@ -1,4 +1,7 @@
+import calendar
 import string
+import datetime
+from django.utils  import timezone
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -480,3 +483,98 @@ def get_user_data(request , option=None):
         count +=1
         user_list.append(dic)
     return user_list
+
+
+def get_anlytics_data(request ,id ,  type=None):
+    user_obj = User.objects.get(id=id)
+    # analytic_obj = Analytics.objects.filter(timestamp__month= 2 , timestamp__year = 2020)
+    # print(analytic_obj)
+    time_list = []
+    count_list = []
+    # print(id , type)
+    #
+    # analytics_obj = Analytics.objects.all()
+    # for analytics in analytics_obj:
+    #     print(analytics.timestamp.strftime('%m %Y'))
+    #     print(analytics.camera_id_id)
+    #     print(analytics.user_id)
+
+    if(type is None or type =='day'):
+        no_of_days = 7
+        today = timezone.now().date()
+        first_date = today - datetime.timedelta(days=no_of_days - 1)
+        for i in range(no_of_days):
+            print(first_date)
+            analytic_obj = Analytics.objects.filter(user=user_obj , timestamp__range = (datetime.datetime.combine(first_date, datetime.time.min),
+                            datetime.datetime.combine(first_date, datetime.time.max)))
+            print(analytic_obj)
+            count = analytic_obj.count()
+            time_list.append(first_date.strftime("%d %b"))
+            count_list.append(count)
+            first_date += datetime.timedelta(days =1)
+    elif(type == 'month'):
+        no_of_months = 6
+        today = timezone.now().date()
+        print(today.today())
+        first_date = monthdelta(today.today() , -no_of_months)
+        print(first_date)
+        for i in range(no_of_months +1 ):
+            month = first_date.month
+            year = first_date.year
+            print(month , year)
+            print(month)
+            analytic_obj = Analytics.objects.filter(user=user_obj, timestamp__month=first_date.month , timestamp__year=first_date.year)
+            print(analytic_obj)
+            count = analytic_obj.count()
+            time_list.append(first_date.strftime("%b %Y"))
+            count_list.append(count)
+            first_date = monthdelta(first_date , 1)
+    else:
+        print('in hour')
+        no_of_hours = 7
+        today = timezone.now()
+        print(today)
+        first_date = today - datetime.timedelta(hours=no_of_hours-1)
+        print(first_date)
+        # print((first_date.hour))
+        for i in range(no_of_hours):
+            hour = first_date.hour
+            print(hour , first_date)
+            analytic_obj = Analytics.objects.filter(user=user_obj ,timestamp__hour=hour   , timestamp__range = (datetime.datetime.combine(first_date, datetime.time.min),
+                            datetime.datetime.combine(first_date, datetime.time.max)))
+            count = analytic_obj.count()
+            time_list.append(first_date.strftime("%I %p"))
+            count_list.append(count)
+            first_date += datetime.timedelta(hours=1)
+
+    print(time_list , count_list)
+
+    return [time_list , count_list]
+
+
+
+
+
+@login_required
+@csrf_exempt
+def get_analytics(request):
+
+    if(request.is_ajax()):
+        id = request.POST.get('id')
+        type = request.POST.get('type')
+        # print(id , type)
+        user_obj = User.objects.get(id = id)
+        data = {}
+        data['id'] = id
+        data['name'] = user_obj.first_name + ' ' + user_obj.last_name
+        result = get_anlytics_data(request , id , type=type)
+        return JsonResponse({'status': 200 , 'count_list': result[1] , 'time_list' : result[0] ,'data' :data})
+
+
+
+
+def monthdelta(date, delta):
+    m, y = (date.month+delta) % 12, date.year + ((date.month)+delta-1) // 12
+    if not m: m = 12
+    d = min(date.day, calendar.monthrange(y, m)[1])
+    return date.replace(day=d,month=m, year=y)

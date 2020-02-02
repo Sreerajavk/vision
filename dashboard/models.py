@@ -15,6 +15,9 @@ class Camera(models.Model):
     name = models.CharField(max_length = 20)
     org_id = models.ForeignKey(to = Organisation , on_delete = models.CASCADE)
 
+    def __str__(self):
+        return str(self.id)
+
 class UserDetails(models.Model):
     user = models.ForeignKey(to = User , on_delete = models.CASCADE )
     org_id = models.ForeignKey(to = Organisation , on_delete = models.CASCADE)
