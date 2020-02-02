@@ -415,4 +415,68 @@ def delete_images(request):
 
 @login_required
 def analytics(request):
-    return render(request , 'Analytics.html' , {'pic' : get_pic(request)})
+
+    user_list = get_user_data(request)
+    # user_obj = User.objects.get(username  = request.user)
+    # org_id = UserDetails.objects.get(user = user_obj).org_id_id
+    # org_obj = Organisation.objects.get(id = org_id)
+    # user_details_obj = UserDetails.objects.exclude(user = request.user).filter(org_id = org_obj)
+    # user_list = []
+    # count = 1
+    # for u in user_details_obj:
+    #     dic = {}
+    #     dic['name'] = u.user.first_name + ' ' + u.user.last_name
+    #     if(u.privilege == 3):
+    #         type = "Candidate"
+    #     else:
+    #         type = "Staff"
+    #     dic['privilege']  = type
+    #     dic['image_url'] = u.pic.url
+    #     dic['id'] = u.user.id
+    #     dic['count'] = count
+    #     count +=1
+    #     user_list.append(dic)
+    return render(request , 'Analytics.html' , {'pic' : get_pic(request) , 'user_list' : user_list})
+
+@login_required
+@csrf_exempt
+def filter_type(request):
+
+    if(request.is_ajax()):
+        option = request.POST.get('option')
+        print(option)
+        user_list = get_user_data(request , option = option)
+        print(user_list)
+        return JsonResponse({'status': 200 , 'user_list' : user_list})
+
+
+
+
+def get_user_data(request , option=None):
+    print(option)
+    user_obj = User.objects.get(username=request.user)
+    org_id = UserDetails.objects.get(user=user_obj).org_id_id
+    org_obj = Organisation.objects.get(id=org_id)
+    user_details_obj = UserDetails.objects.exclude(user=request.user).filter(org_id=org_obj)
+    user_list = []
+    count = 1
+    if(option == '0'):
+        user_details_obj = user_details_obj.filter(privilege = 2)
+    elif(option == '1'):
+        user_details_obj = user_details_obj.filter(privilege = 3)
+    else:
+        pass
+    for u in user_details_obj:
+        dic = {}
+        dic['name'] = u.user.first_name + ' ' + u.user.last_name
+        if(u.privilege == 3):
+            type = "Candidate"
+        else:
+            type = "Staff"
+        dic['privilege']  = type
+        dic['image_url'] = u.pic.url
+        dic['id'] = u.user.id
+        dic['count'] = count
+        count +=1
+        user_list.append(dic)
+    return user_list

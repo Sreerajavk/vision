@@ -13,6 +13,7 @@ urlpatterns = [
     path('delete-staff/' , views.delete_staff ),
     path('delete-images/' , views.delete_images),
     path('analytics/' , views.analytics),
+    path('filter-type/' , views.filter_type),
     re_path('edit-candidate/(?P<id>[0-9]+)' , views.edit_candidate),
     re_path('verify-staff/(?P<token>[0-9a-zA-Z]+)/(?P<email>[0-9a-zA-Z@._]+)/(?P<org_id>[0-9]+)' , views.verify_staff , name='activate')
 ]
