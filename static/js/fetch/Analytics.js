@@ -44,6 +44,7 @@ $(document.body).on('click', '.table-row', function (event) {
                     $('#no_content').removeClass('no-content');
                     $("#no_content").html("");
                     $('#analytic_head').html(response.data.name )
+                $('#option_time').val('day')
             }
         },
         fail: function (response) {
@@ -96,6 +97,9 @@ function fill_table(response) {
 }
 
 function fill_chart(response) {
+    var basic_chart = document.getElementById("basic-chart");
+    basic_chart.innerHTML = "";
+    basic_chart.innerHTML += `<canvas id="basiclinechart"></canvas>`;
     var ctx = document.getElementById("basiclinechart");
     var basiclinechart = new Chart(ctx, {
         type: 'line',
@@ -103,7 +107,7 @@ function fill_chart(response) {
             labels: response.time_list,
             datasets: [{
                 label: "Count",
-                fill: false,
+                fill: true,
                 backgroundColor: '#03a9f4',
                 borderColor: '#03a9f4',
                 data: response.count_list

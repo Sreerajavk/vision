@@ -493,11 +493,12 @@ def get_anlytics_data(request ,id ,  type=None):
     count_list = []
     # print(id , type)
     #
-    # analytics_obj = Analytics.objects.all()
-    # for analytics in analytics_obj:
-    #     print(analytics.timestamp.strftime('%m %Y'))
-    #     print(analytics.camera_id_id)
-    #     print(analytics.user_id)
+    analytics_obj = Analytics.objects.all()
+    for analytics in analytics_obj:
+        print('\n\n')
+        print(analytics.timestamp)
+        print(analytics.camera_id_id)
+        print(analytics.user_id)
 
     if(type is None or type =='day'):
         no_of_days = 7
@@ -520,10 +521,14 @@ def get_anlytics_data(request ,id ,  type=None):
         print(first_date)
         for i in range(no_of_months +1 ):
             month = first_date.month
+            # if(first_date.month < 10):
+            #     month = str('0'+str(first_date.month))
+            # else:
+            #     month = first_date.month
             year = first_date.year
             print(month , year)
-            print(month)
-            analytic_obj = Analytics.objects.filter(user=user_obj, timestamp__month=first_date.month , timestamp__year=first_date.year)
+            # print(month)
+            analytic_obj = Analytics.objects.filter(user=user_obj,  timestamp__month=month, timestamp__year=year)
             print(analytic_obj)
             count = analytic_obj.count()
             time_list.append(first_date.strftime("%b %Y"))
@@ -531,17 +536,19 @@ def get_anlytics_data(request ,id ,  type=None):
             first_date = monthdelta(first_date , 1)
     else:
         print('in hour')
-        no_of_hours = 7
+        no_of_hours = 10
         today = timezone.now()
         print(today)
-        first_date = today - datetime.timedelta(hours=no_of_hours-1)
+        first_date = today - datetime.timedelta(hours=8)
         print(first_date)
         # print((first_date.hour))
         for i in range(no_of_hours):
             hour = first_date.hour
-            print(hour , first_date)
-            analytic_obj = Analytics.objects.filter(user=user_obj ,timestamp__hour=hour   , timestamp__range = (datetime.datetime.combine(first_date, datetime.time.min),
-                            datetime.datetime.combine(first_date, datetime.time.max)))
+            if(hour < 10):
+                hour = str('0' + str(first_date.hour))
+            print(hour , first_date.date())
+            # print(datetime.datetime.combine(first_date.date(), datetime.time(00,00,00,000000)))
+            analytic_obj = Analytics.objects.filter(user=user_obj , timestamp__hour = first_date.hour , timestamp__date = first_date.date() )
             count = analytic_obj.count()
             time_list.append(first_date.strftime("%I %p"))
             count_list.append(count)

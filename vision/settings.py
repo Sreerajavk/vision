@@ -122,14 +122,12 @@ if not DEBUG:
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+TIME_ZONE =  'Asia/Kolkata'
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -145,7 +143,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'sreesreeraj'
 EMAIL_HOST_PASSWORD = 'sreejith123'
 LOGIN_URL = '/login/'
-TIME_ZONE =  'Asia/Kolkata'
+
 
 # EMAIL_USE_TLS = True
 
