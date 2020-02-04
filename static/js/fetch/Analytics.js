@@ -33,7 +33,8 @@ $(document.body).on('click', '.table-row', function (event) {
         method: 'post',
         data: {
             id: id,
-            type : 'day'
+            type : 'day',
+            org_id : $('#org_id').prop('value'),
         },
         success: function (response) {
 
@@ -44,7 +45,8 @@ $(document.body).on('click', '.table-row', function (event) {
                     $('#no_content').removeClass('no-content');
                     $("#no_content").html("");
                     $('#analytic_head').html(response.data.name )
-                $('#option_time').val('day')
+                $('#option_time').val('day');
+                    $("#option_camera").val(response.camera_name)
             }
         },
         fail: function (response) {
@@ -61,13 +63,16 @@ $(document.body).on('click', '#option_time', function (event) {
     let id = $('#user_id').prop('value');
     // alert(id)
     // alert('sdfsdf')
+    // alert($('#org_id').prop('value'))
     $.ajax({
         url: '/dashboard/get-analytics/',
         datatype: 'json',
         method: 'post',
         data: {
             id: id,
-            type : $(this).val()
+            org_id : $('#org_id').prop('value'),
+            type : $(this).val(),
+            camera_id : $('#option_camera').val()
         },
         success: function (response) {
 

@@ -419,7 +419,10 @@ def delete_images(request):
 @login_required
 def analytics(request):
 
-    user_list = get_user_data(request)
+    result = get_user_data(request)
+    user_list = result[0]
+    camera_list = result[1]
+    org_id = result[2]
     # user_obj = User.objects.get(username  = request.user)
     # org_id = UserDetails.objects.get(user = user_obj).org_id_id
     # org_obj = Organisation.objects.get(id = org_id)
@@ -439,7 +442,8 @@ def analytics(request):
     #     dic['count'] = count
     #     count +=1
     #     user_list.append(dic)
-    return render(request , 'Analytics.html' , {'pic' : get_pic(request) , 'user_list' : user_list})
+    return render(request , 'Analytics.html' , {'pic' : get_pic(request) ,
+                    'user_list' : user_list , 'camera_list': camera_list , 'org_id': org_id})
 
 @login_required
 @csrf_exempt
@@ -460,6 +464,10 @@ def get_user_data(request , option=None):
     user_obj = User.objects.get(username=request.user)
     org_id = UserDetails.objects.get(user=user_obj).org_id_id
     org_obj = Organisation.objects.get(id=org_id)
+    camera_obj = Camera.objects.filter(org_id = org_obj )
+    camera_list = []
+    for camera in camera_obj:
+        camera_list.append(camera.name)
     user_details_obj = UserDetails.objects.exclude(user=request.user).filter(org_id=org_obj)
     user_list = []
     count = 1
@@ -482,23 +490,31 @@ def get_user_data(request , option=None):
         dic['count'] = count
         count +=1
         user_list.append(dic)
-    return user_list
+    return [user_list ,camera_list , org_id]
 
 
-def get_anlytics_data(request ,id ,  type=None):
+def get_anlytics_data(request ,id , org_id ,  type=None , camera_id = None ):
     user_obj = User.objects.get(id=id)
     # analytic_obj = Analytics.objects.filter(timestamp__month= 2 , timestamp__year = 2020)
     # print(analytic_obj)
     time_list = []
     count_list = []
     # print(id , type)
-    #
-    analytics_obj = Analytics.objects.all()
-    for analytics in analytics_obj:
-        print('\n\n')
-        print(analytics.timestamp)
-        print(analytics.camera_id_id)
-        print(analytics.user_id)
+    print(camera_id , org_id)
+    if camera_id is None:
+        camera_obj = Camera.objects.filter(org_id = Organisation.objects.get(id = org_id)).first()
+        camera_name = camera_obj.name
+    else:
+        camera_obj = Camera.objects.get(name=camera_id ,org_id = Organisation.objects.get(id=org_id) )
+        camera_name = camera_id
+    print(camera_obj.id)
+    # print(camera_obj.name)
+    # analytics_obj = Analytics.objects.all()
+    # for analytics in analytics_obj:
+    #     print('\n\n')
+    #     print(analytics.timestamp)
+    #     print(analytics.camera_id_id)
+    #     print(analytics.user_id)
 
     if(type is None or type =='day'):
         no_of_days = 7
@@ -506,8 +522,7 @@ def get_anlytics_data(request ,id ,  type=None):
         first_date = today - datetime.timedelta(days=no_of_days - 1)
         for i in range(no_of_days):
             print(first_date)
-            analytic_obj = Analytics.objects.filter(user=user_obj , timestamp__range = (datetime.datetime.combine(first_date, datetime.time.min),
-                            datetime.datetime.combine(first_date, datetime.time.max)))
+            analytic_obj = Analytics.objects.filter(user=user_obj , timestamp__date = first_date ,camera_id = camera_obj)
             print(analytic_obj)
             count = analytic_obj.count()
             time_list.append(first_date.strftime("%d %b"))
@@ -528,7 +543,7 @@ def get_anlytics_data(request ,id ,  type=None):
             year = first_date.year
             print(month , year)
             # print(month)
-            analytic_obj = Analytics.objects.filter(user=user_obj,  timestamp__month=month, timestamp__year=year)
+            analytic_obj = Analytics.objects.filter(user=user_obj,  timestamp__month=month, timestamp__year=year , camera_id = camera_obj)
             print(analytic_obj)
             count = analytic_obj.count()
             time_list.append(first_date.strftime("%b %Y"))
@@ -548,7 +563,8 @@ def get_anlytics_data(request ,id ,  type=None):
                 hour = str('0' + str(first_date.hour))
             print(hour , first_date.date())
             # print(datetime.datetime.combine(first_date.date(), datetime.time(00,00,00,000000)))
-            analytic_obj = Analytics.objects.filter(user=user_obj , timestamp__hour = first_date.hour , timestamp__date = first_date.date() )
+            analytic_obj = Analytics.objects.filter(user=user_obj , timestamp__hour = first_date.hour ,
+                                            timestamp__date = first_date.date() ,camera_id = camera_obj)
             count = analytic_obj.count()
             time_list.append(first_date.strftime("%I %p"))
             count_list.append(count)
@@ -556,7 +572,7 @@ def get_anlytics_data(request ,id ,  type=None):
 
     print(time_list , count_list)
 
-    return [time_list , count_list]
+    return [time_list , count_list , camera_name]
 
 
 
@@ -569,16 +585,21 @@ def get_analytics(request):
     if(request.is_ajax()):
         id = request.POST.get('id')
         type = request.POST.get('type')
+        camera_id = request.POST.get('camera_id')
+        org_id = request.POST.get('org_id')
         # print(id , type)
         user_obj = User.objects.get(id = id)
         data = {}
         data['id'] = id
         data['name'] = user_obj.first_name + ' ' + user_obj.last_name
-        result = get_anlytics_data(request , id , type=type)
-        return JsonResponse({'status': 200 , 'count_list': result[1] , 'time_list' : result[0] ,'data' :data})
+        result = get_anlytics_data(request , id ,org_id, type=type , camera_id=camera_id)
+        return JsonResponse({'status': 200 , 'count_list': result[1] , 'time_list' : result[0] ,'data' :data , 'camera_name' : result[2]})
 
 
-
+@login_required
+@csrf_exempt
+def overall_anlytics(request):
+    return render(request , 'OverallAnalytics.html' , {'pic' : get_pic(request)})
 
 def monthdelta(date, delta):
     m, y = (date.month+delta) % 12, date.year + ((date.month)+delta-1) // 12
