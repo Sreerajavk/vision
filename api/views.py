@@ -53,4 +53,9 @@ def get_candidates(request):
     data = json.dumps(user_list)
     return JsonResponse({'status': 200, 'data': user_list})
 
+@csrf_exempt
+def get_analytics(request):
+    username = request.POST.get('email')
+    print(username)
+
 
