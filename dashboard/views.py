@@ -529,7 +529,7 @@ def get_anlytics_data(request ,id , org_id ,  type=None , camera_id = None ):
             count_list.append(count)
             first_date += datetime.timedelta(days =1)
     elif(type == 'month'):
-        no_of_months = 6
+        no_of_months = 5
         today = timezone.now().date()
         print(today.today())
         first_date = monthdelta(today.today() , -no_of_months)
@@ -551,10 +551,10 @@ def get_anlytics_data(request ,id , org_id ,  type=None , camera_id = None ):
             first_date = monthdelta(first_date , 1)
     else:
         print('in hour')
-        no_of_hours = 10
+        no_of_hours = 8
         today = timezone.now()
         print(today)
-        first_date = today - datetime.timedelta(hours=8)
+        first_date = today - datetime.timedelta(hours=7)
         print(first_date)
         # print((first_date.hour))
         for i in range(no_of_hours):
@@ -598,8 +598,82 @@ def get_analytics(request):
 
 @login_required
 @csrf_exempt
-def overall_anlytics(request):
-    return render(request , 'OverallAnalytics.html' , {'pic' : get_pic(request)})
+def overall_analytics(request):
+
+    if(request.is_ajax()):
+        # print('urowiuerowieur')
+        from_date = request.POST.get('from_date')
+        to_date = request.POST.get('to_date')
+        camera_id = request.POST.get('camera_id')
+        # print(from_date , to_date)
+        user_list = []
+        count_list = []
+        data = []
+        from_date = datetime.datetime.strptime(from_date, "%Y-%m-%d").date()
+        to_date = datetime.datetime.strptime(to_date, "%Y-%m-%d").date()
+        if(camera_id is None):
+            obj = Analytics.objects.filter(timestamp__range=(
+                datetime.datetime.combine(from_date, datetime.time.min),
+                datetime.datetime.combine(to_date, datetime.time.max),
+            ))
+        else:
+            camera_obj = Camera.objects.get(name = camera_id)
+            obj = Analytics.objects.filter(timestamp__range=(
+                datetime.datetime.combine(from_date, datetime.time.min),
+                datetime.datetime.combine(to_date, datetime.time.max),
+            ), camera_id = camera_obj)
+
+        count = 1
+        for item in obj:
+            username = item.user.username
+            user_details_obj = UserDetails.objects.get(user = item.user)
+            if username not in user_list:
+                user_list.append(username)
+                temp = {}
+                temp['no']  = count
+                temp['id'] = item.user.id
+                temp['name'] = item.user.first_name + ' ' + item.user.last_name
+                temp['image_url'] = user_details_obj.pic.url
+                temp['type'] = "Candidate"
+                if(user_details_obj.privilege == 2):
+                    temp['type']  = "Staff"
+                temp['count'] = obj.filter(user = item.user).count()
+                data.append(temp)
+                count +=1
+                # count_list.append(obj.filter(user = item.user).count())
+
+        #for unique persons in each day
+        unique_user_list = []
+        time_list = []
+        count_list = []
+        while(from_date <= to_date):
+            if(camera_id is None):
+                obj = Analytics.objects.filter(timestamp__date = from_date)
+            else:
+                camera_obj = Camera.objects.get(name=camera_id)
+                obj  = Analytics.objects.filter(timestamp__date = from_date  , camera_id = camera_obj )
+            count = 0
+            for item in obj:
+                username = item.user.username
+                if username not in unique_user_list:
+                    unique_user_list.append(username)
+                    count += 1
+            time_list.append(from_date.strftime("%d %b"))
+            count_list.append(count)
+            unique_user_list = []
+            from_date += datetime.timedelta(days=1)
+        return JsonResponse({'count_list': count_list , 'time_list' :time_list , 'data': data})
+
+    user  = User.objects.get(username = request.user)
+    obj = UserDetails.objects.get(user = user)
+    # org_obj = Organisation.objects.get(id = obj.org_id_id)
+    camera_obj = Camera.objects.filter(org_id = obj.org_id)
+    print(camera_obj)
+    camera_list = []
+    for camera in camera_obj:
+        camera_list.append(camera.name)
+
+    return render(request , 'OverallAnalytics.html' , {'pic' : get_pic(request) , 'camera_list': camera_list})
 
 def monthdelta(date, delta):
     m, y = (date.month+delta) % 12, date.year + ((date.month)+delta-1) // 12

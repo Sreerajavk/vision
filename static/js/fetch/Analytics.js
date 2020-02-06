@@ -94,7 +94,7 @@ function fill_table(response) {
     $('#full_table').slideUp(500, function () {
         table_content.innerHTML = "";
         for (user of response.user_list) {
-            let row = `<tr id="${user.id}" class="table-row"><td>${user.count}</td><td>${user.name}</td><td><img src="${user.image_url}" id="table-image"></td><td>${user.privilege}</td>`
+            let row = `<tr id="${user.id}" class="table-row"><td>${user.count}</td><td>${user.name}</td><td><img src="${user.image_url}" id="table-image"></td><td>${user.privilege}</td></tr>`
             table_content.innerHTML += row;
         }
         $('#full_table').slideDown(500)
