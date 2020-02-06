@@ -20,7 +20,8 @@ $(document.body).on('click' , '#search_bt' , function (event) {
         data : {
             from_date  : from_date,
             to_date : to_date,
-            org_id : $('#org_id').prop('value')
+            org_id : $('#org_id').prop('value'),
+            type : 'All'
         },
         success : function (response) {
             // alert('sjhfdksjdh')
@@ -34,6 +35,33 @@ $(document.body).on('click' , '#search_bt' , function (event) {
     })
 
 });
+
+$(document.body).on('click', '#option_type', function (event) {
+
+    let option = $('#option_type').val();
+    // alert(option)
+    $.ajax({
+        url: '/dashboard/overall-analytics/',
+        datatype: 'json',
+        method: 'post',
+        data: {
+            from_date  : from_date,
+            to_date : to_date,
+            org_id : $('#org_id').prop('value'),
+            type : option
+        },
+        success: function (response) {
+
+            if (response.status == '200') {
+                console.log(response.user_list);
+                fill_table(response)
+            }
+        },
+        fail: function (response) {
+
+        }
+    })
+})
 
 
 function fill_table(response) {

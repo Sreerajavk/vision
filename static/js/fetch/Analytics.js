@@ -34,6 +34,7 @@ $(document.body).on('click', '.table-row', function (event) {
         data: {
             id: id,
             type : 'day',
+            camera_id:  'All cameras',
             org_id : $('#org_id').prop('value'),
         },
         success: function (response) {
@@ -56,7 +57,7 @@ $(document.body).on('click', '.table-row', function (event) {
 })
 
 
-$(document.body).on('click', '#option_time', function (event) {
+$(document.body).on('click', '.options', function (event) {
 
     // let option = $('#option_type').val();
     // alert(option)
@@ -71,7 +72,7 @@ $(document.body).on('click', '#option_time', function (event) {
         data: {
             id: id,
             org_id : $('#org_id').prop('value'),
-            type : $(this).val(),
+            type : $('#option_time').val(),
             camera_id : $('#option_camera').val()
         },
         success: function (response) {
