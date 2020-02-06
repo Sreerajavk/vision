@@ -12,7 +12,7 @@ class AdminStaffVerification(admin.ModelAdmin):
     list_display = ('token' , 'email' , 'visited')
 
 class AdminOrganisation(admin.ModelAdmin):
-    list_display = ('id' , 'name' , 'address')
+    list_display = ('id' , 'name' , 'address' , 'api_key')
 
 class AdminUserDetails(admin.ModelAdmin):
     list_display = ('user' , 'org_id','phone','pic','privilege')

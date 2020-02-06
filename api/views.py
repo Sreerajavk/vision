@@ -27,6 +27,9 @@ def login_fn(request):
         data['image_url'] = userDetais_obj.pic.url
         data['org_id']  = userDetais_obj.org_id_id
         data['phone'] = userDetais_obj.phone
+
+        #getting organisation details
+        data['api_key'] = userDetais_obj.org_id.api_key
         data = json.dumps(data)
         return JsonResponse({'status' : 200,'data' : data})
         # user_obj = UserDetails.objects.get(user = u )

@@ -7,6 +7,7 @@ from django.db import models
 class Organisation(models.Model):
     name = models.CharField(max_length=50)
     address = models.CharField(max_length=100)
+    api_key = models.CharField(max_length=16)
 
     def __str__(self):
         return str(self.id)
