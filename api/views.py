@@ -80,7 +80,9 @@ def get_analytics(request):
     org_id = user_details_obj.org_id_id
     # print(org_id)
     result = get_anlytics_data(request , user_obj.id , api_key , camera_id , type)
-    return JsonResponse({'status' : 200 , 'data': result })
+    data = result[:2]
+    raw_data = result[3]
+    return JsonResponse({'status' : 200 , 'data': data , 'raw_data' : raw_data })
 
 
 @csrf_exempt
@@ -93,6 +95,7 @@ def get_anlytics_data(request ,id , api_key , camera_id  , type=None  ):
     print(camera_id , api_key , type)
     org_obj = Organisation.objects.get(api_key=api_key)
     camera_status = 0
+    raw_data = []
     if camera_id == 'All Cameras':
         print('sdfsjdflksdjflk')
         camera_name = "All cameras"
@@ -115,6 +118,12 @@ def get_anlytics_data(request ,id , api_key , camera_id  , type=None  ):
             time_list.append(first_date.strftime("%d %b"))
             count_list.append(count)
             first_date += datetime.timedelta(days =1)
+            if(analytic_obj):
+                for obj in analytic_obj:
+                    dic = {}
+                    dic['time_stamp'] = obj.timestamp.strftime("%d %b %Y %I:%M:%S %p")
+                    dic['camera_name'] = obj.camera_id.name
+                    raw_data.append(dic)
     elif(type == 'Last 6 months'):
         print('Last 6 months')
         no_of_months = 6
@@ -133,6 +142,12 @@ def get_anlytics_data(request ,id , api_key , camera_id  , type=None  ):
             time_list.append(first_date.strftime("%b"))
             count_list.append(count)
             first_date = monthdelta(first_date , 1)
+            if (analytic_obj):
+                for obj in analytic_obj:
+                    dic = {}
+                    dic['time_stamp'] = obj.timestamp.strftime("%d %b %Y %I:%M:%S %p")
+                    dic['camera_name'] = obj.camera_id.name
+                    raw_data.append(dic)
     else:
         print('in hour')
         no_of_hours = 8
@@ -152,10 +167,19 @@ def get_anlytics_data(request ,id , api_key , camera_id  , type=None  ):
             time_list.append(first_date.strftime("%I%p"))
             count_list.append(count)
             first_date += datetime.timedelta(hours=1)
+            if (analytic_obj):
+                for obj in analytic_obj:
+                    dic = {}
+                    dic['time_stamp'] = obj.timestamp.strftime("%d %b %Y %I:%M:%S %p")
+                    dic['camera_name'] = obj.camera_id.name
+                    raw_data.append(dic)
 
+    # raw_data = {}
+    # for obj in analytic_obj:
+    #     print(obj)
     print(time_list , count_list)
 
-    return [time_list , count_list , camera_name]
+    return [time_list , count_list , camera_name , raw_data]
 
 
 def monthdelta(date, delta):
@@ -164,3 +188,111 @@ def monthdelta(date, delta):
     d = min(date.day, calendar.monthrange(y, m)[1])
     return date.replace(day=d,month=m, year=y)
 
+
+
+@csrf_exempt
+def overall_analytics(request):
+    print(request)
+    if(request.method == 'POST'):
+        # print('urowiuerowieur')
+        from_date = request.POST.get('from_date')
+        to_date = request.POST.get('to_date')
+        camera_id = request.POST.get('camera_id')
+        api_key = request.POST.get('api_key')
+        type = request.POST.get('type')
+        print(from_date , to_date , camera_id , type)
+        user_list = []
+        data = []
+        from_date = datetime.datetime.strptime(from_date, "%Y-%m-%d").date()
+        to_date = datetime.datetime.strptime(to_date, "%Y-%m-%d").date()
+        org_obj = Organisation.objects.get(api_key = api_key)
+        if(camera_id == 'All Cameras'):
+            print('sree')
+            obj = Analytics.objects.filter(timestamp__range=(
+                datetime.datetime.combine(from_date, datetime.time.min),
+                datetime.datetime.combine(to_date, datetime.time.max),
+            ))
+        else:
+            camera_obj = Camera.objects.get(name = camera_id)
+            obj = Analytics.objects.filter(timestamp__range=(
+                datetime.datetime.combine(from_date, datetime.time.min),
+                datetime.datetime.combine(to_date, datetime.time.max),
+            ), camera_id = camera_obj )
+
+        # count = 1
+        # for item in obj:
+        #     username = item.user.username
+        #     user_details_obj = UserDetails.objects.filter(user = item.user , org_id = org_obj).first()
+        #     if user_details_obj:
+        #         if username not in user_list:
+        #             user_list.append(username)
+        #             temp = {}
+        #             temp['no']  = count
+        #             temp['id'] = item.user.id
+        #             temp['name'] = item.user.first_name + ' ' + item.user.last_name
+        #             temp['image_url'] = user_details_obj.pic.url
+        #             temp['type'] = "Candidate"
+        #             if(user_details_obj.privilege == 2):
+        #                 temp['type']  = "Staff"
+        #             temp['count'] = obj.filter(user = item.user).count()
+        #
+        #             print(type , temp['type'])
+        #             if(type == 'Staff' and temp['type'] == 'Staff'):
+        #                     data.append(temp)
+        #             elif(type == 'Candidate' and temp['type'] == 'Candidate'):
+        #                     data.append(temp)
+        #             elif(type =='All'):
+        #                 data.append(temp)
+        #             else:
+        #                 pass
+        #             count +=1
+        #             # count_list.append(obj.filter(user = item.user).count())
+        # print(data)
+
+        #for unique persons in each day
+        unique_user_list = []
+        time_list = []
+        count_list = []
+        while(from_date <= to_date):
+            if(camera_id == 'All Cameras'):
+                obj = Analytics.objects.filter(timestamp__date = from_date )
+            else:
+                camera_obj = Camera.objects.get(name=camera_id)
+                obj = Analytics.objects.filter(timestamp__date = from_date  , camera_id = camera_obj )
+            count = 0
+            for item in obj:
+                username = item.user.username
+                user_details_obj = UserDetails.objects.filter(user=item.user, org_id=org_obj , privilege = 3)
+                if user_details_obj:
+                    if username not in unique_user_list:
+                        unique_user_list.append(username)
+                        count += 1
+            time_list.append(from_date.strftime("%d %b"))
+            count_list.append(count)
+            unique_user_list = []
+            from_date += datetime.timedelta(days=1)
+        return JsonResponse({'count_list': count_list , 'time_list' :time_list , 'data': data , 'status' : 200})
+    else:
+        print('sdfjslkdfjlskdfj')
+
+
+@csrf_exempt
+def edit_profile(request):
+
+    if(request.method == 'POST'):
+        username = request.POST.get('username')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        phone = request.POST.get('phone')
+
+        user_obj = User.objects.get(username = username)
+        user_obj.first_name = first_name
+        user_obj.last_name = last_name
+
+        user_details_obj = UserDetails.objects.get(user = user_obj)
+        user_details_obj.phone = phone
+
+        user_details_obj.save()
+        user_obj.save()
+
+        return JsonResponse({'status': 200})

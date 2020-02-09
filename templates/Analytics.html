@@ -74,7 +74,8 @@
                                 <h4 id="analytic_head"> User Analytics</h4>
                                 <div class="chosen-select-single mg-b-20 form-group">
                                     {#                                    <label>User Type</label>#}
-                                    <select class="select2_demo_3 form-control options" name="option" id="option_camera">
+                                    <select class="select2_demo_3 form-control options" name="option"
+                                            id="option_camera">
                                         <option disabled selected>Select</option>
                                         <option value="All cameras">All cameras</option>
                                         {% for camera in camera_list %}
@@ -91,13 +92,46 @@
                                         <option value="hour">Last 8 hours</option>
                                     </select>
                                 </div>
-                                a
+
                             </div>
                         </div>
                         <h3 class="no-content" id="no_content">No Available Data</h3>
                         <div id="basic-chart">
                             <canvas id="basiclinechart"></canvas>
                         </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12" style="margin-top: 50px;display: none;float: right" id="analytiv_div">
+                    <div class="charts-single-pro responsive-mg-b-30">
+                        <div class="" style="color:#fff !important; ">
+                                <input type="hidden" id="user_id">
+                                <h4 id="analytic_head2" style="text-align: center;margin-bottom: 2em;"> </h4>
+                        </div>
+                        <div class="static-table-list">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Camera</th>
+
+                                </tr>
+                                </thead>
+                                <tbody id="timestamp_content">
+{#                                {% for item in raw_data %}#}
+{##}
+{#                                    <tr id="{{ item.count }}" class="table-row">#}
+{#                                        <td>{{ user.time_stamp }}</td>#}
+{#                                        <td>{{ user.camera_name }}</td>#}
+{#                                      #}
+                                        {#                                    <td>@Facebook</td>#}
+{#                                    </tr>#}
+{#                                {% endfor %}#}
+                                </tbody>
+                            </table>
+                        </div>
+
                     </div>
                 </div>
             </div>

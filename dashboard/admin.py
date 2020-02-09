@@ -21,7 +21,7 @@ class AdminAnalytics(admin.ModelAdmin):
     list_display = ('user' , 'timestamp' , 'camera_id')
 
 class AdminCamera(admin.ModelAdmin):
-    list_display = ('name' , 'org_id')
+    list_display = ('id' , 'name' , 'org_id')
 
 class AdminCandidatePic(admin.ModelAdmin):
     list_display = ( 'user','images',)

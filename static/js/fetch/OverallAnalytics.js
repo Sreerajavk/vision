@@ -1,34 +1,34 @@
-
-
-$(document.body).on('click' , '#search_bt' , function (event) {
+$(document.body).on('click', '#search_bt', function (event) {
     event.preventDefault();
     let from_date = $("#from_date").val();
     let to_date = $('#to_date').val();
-    if(from_date == ""){
+    if (from_date == "") {
         alert('Select from date');
         return
     }
-    if(to_date == ""){
+    if (to_date == "") {
         alert('Select to date');
         return
     }
 
     $.ajax({
-        url : '/dashboard/overall-analytics/',
-        method : 'post',
-        datatype : 'json',
-        data : {
-            from_date  : from_date,
-            to_date : to_date,
-            org_id : $('#org_id').prop('value'),
-            type : 'All'
+        url: '/dashboard/overall-analytics/',
+        method: 'post',
+        datatype: 'json',
+        data: {
+            from_date: from_date,
+            to_date: to_date,
+            org_id: $('#org_id').prop('value'),
+            type: 'All',
+            camera_id: 'All'
         },
-        success : function (response) {
+        success: function (response) {
             // alert('sjhfdksjdh')
             fill_chart(response);
-            fill_table(response)
+            fill_table(response, true);
+
         },
-        fail : function (response) {
+        fail: function (response) {
 
         }
 
@@ -36,25 +36,39 @@ $(document.body).on('click' , '#search_bt' , function (event) {
 
 });
 
-$(document.body).on('click', '#option_type', function (event) {
+$(document.body).on('change', '.option', function (event) {
 
-    let option = $('#option_type').val();
-    // alert(option)
+    event.preventDefault();
+    let from_date = $("#from_date").val();
+    let to_date = $('#to_date').val();
+    if (from_date == "") {
+        alert('Select from date');
+        return
+    }
+    if (to_date == "") {
+        alert('Select to date');
+        return
+    }
+    let type = $('#option_type').val();
+    let camera_id = $('#option_camera').val();
+    console.log(type, camera_id)
     $.ajax({
         url: '/dashboard/overall-analytics/',
         datatype: 'json',
         method: 'post',
         data: {
-            from_date  : from_date,
-            to_date : to_date,
-            org_id : $('#org_id').prop('value'),
-            type : option
+            from_date: from_date,
+            to_date: to_date,
+            org_id: $('#org_id').prop('value'),
+            type: type,
+            camera_id: camera_id,
         },
         success: function (response) {
 
             if (response.status == '200') {
-                console.log(response.user_list);
-                fill_table(response)
+                console.log(response.data);
+                fill_table(response, false);
+                fill_chart(response)
             }
         },
         fail: function (response) {
@@ -64,19 +78,55 @@ $(document.body).on('click', '#option_type', function (event) {
 })
 
 
-function fill_table(response) {
+function fill_table(response, status) {
     let data = response.data;
-    console.log(data)
-     let table_content = document.getElementById('table_content');
+    console.log(data);
+    let table_content = document.getElementById('table_content');
+    // if (!status) {
+    //     // alert('sdf')
+    //     $('#table_content').slideUp(1000, function () {
+    //         table_content.innerHTML = "";
+    //         for (user of response.data) {
+    //             let row = `<tr id="${user.id}" class="table-row"><td>${user.count}</td><td>${user.name}</td><td><img src="${user.image_url}" id="table-image"></td><td>${user.type}</td><td>${user.count}</td></tr>`
+    //             table_content.innerHTML += row;
+    //         }
+    //
+    //         $('#table_content').slideDown(500);
+    //     })
+    // }
+    //     else {
+    //          table_content.innerHTML = "";
+    //         for (user of response.data) {
+    //             let row = `<tr id="${user.id}" class="table-row"><td>${user.count}</td><td>${user.name}</td><td><img src="${user.image_url}" id="table-image"></td><td>${user.type}</td><td>${user.count}</td></tr>`
+    //             table_content.innerHTML += row;
+    //         }
+    //         $('#full_content').slideDown(500);
+    //     }
+    if (status) {
 
-    // $('#full_table').slideUp(500, function () {
-        table_content.innerHTML = "";
-        for (user of response.data) {
-            let row = `<tr id="${user.id}" class="table-row"><td>${user.count}</td><td>${user.name}</td><td><img src="${user.image_url}" id="table-image"></td><td>${user.type}</td><td>${user.count}</td></tr>`
-            table_content.innerHTML += row;
-        }
-        $('#full_content').slideDown(500)
-    // })
+        // $('#full_table').slideUp(500, function () {
+            table_content.innerHTML = "";
+            for (user of response.data) {
+                let row = `<tr id="${user.id}" class="table-row"><td>${user.no}</td><td>${user.name}</td><td><img src="${user.image_url}" id="table-image"></td><td>${user.type}</td><td>${user.count}</td></tr>`
+                table_content.innerHTML += row;
+            }
+
+            $('#full_content').slideDown(500);
+        // })
+    } else {
+        $('#full_content').slideDown(500);
+        $('#full_table').slideUp(500, function () {
+            table_content.innerHTML = "";
+            for (user of response.data) {
+                let row = `<tr id="${user.id}" class="table-row"><td>${user.no}</td><td>${user.name}</td><td><img src="${user.image_url}" id="table-image"></td><td>${user.type}</td><td>${user.count}</td></tr>`
+                table_content.innerHTML += row;
+            }
+
+            $('#full_table').slideDown(500);
+        })
+    }
+
+
 }
 
 

@@ -41,6 +41,7 @@ $(document.body).on('click', '.table-row', function (event) {
 
             if (response.status == '200') {
                     fill_chart(response);
+                    fill_timestamp(response)
                     console.log(response.data)
                      $('#user_id').prop('value' , response.data.id);
                     $('#no_content').removeClass('no-content');
@@ -78,7 +79,8 @@ $(document.body).on('click', '.options', function (event) {
         success: function (response) {
 
             if (response.status == '200') {
-                    fill_chart(response)
+                    fill_chart(response);
+                    fill_timestamp(response);
                     $('#analytic_head').html(response.data.name )
             }
         },
@@ -164,4 +166,20 @@ function fill_chart(response) {
             }
         }
     });
+}
+
+function fill_timestamp(response) {
+
+    let table_content = document.getElementById('timestamp_content');
+
+    // $('#full_table').slideUp(500, function () {
+        table_content.innerHTML = "";
+        for (user of response.raw_data) {
+            let row = `<tr  class="table-row"><td>${user.count}</td><td>${user.date}</td><td>${user.time}</td><td>${user.camera_name}</td></tr>`
+            table_content.innerHTML += row;
+        }
+        $('#analytiv_div').slideDown(500);
+        $('#analytic_head2').html(response.data.name + "  Analytics")
+    // })
+
 }

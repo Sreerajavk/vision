@@ -503,6 +503,7 @@ def get_anlytics_data(request ,id , org_id ,  type=None , camera_id = None ):
     user_obj = User.objects.get(id=id)
     time_list = []
     count_list = []
+    raw_data = []
     # print(id , type)
     print(camera_id , org_id)
     camera_status = 0
@@ -514,7 +515,7 @@ def get_anlytics_data(request ,id , org_id ,  type=None , camera_id = None ):
         camera_obj = Camera.objects.get(name=camera_id ,org_id = Organisation.objects.get(id=org_id) )
         camera_name = camera_id
     # print(camera_obj.id)
-
+    cou = 1
     if(type is None or type =='day'):
         no_of_days = 7
         today = timezone.now().date()
@@ -529,6 +530,17 @@ def get_anlytics_data(request ,id , org_id ,  type=None , camera_id = None ):
             time_list.append(first_date.strftime("%d %b"))
             count_list.append(count)
             first_date += datetime.timedelta(days =1)
+
+            if (analytic_obj):
+                for obj in analytic_obj:
+                    dic = {}
+                    dic['count'] = cou
+                    cou += 1
+                    dic['date'] = obj.timestamp.strftime("%d %b %Y ")
+                    dic['time'] = obj.timestamp.strftime("%I:%M:%S %p")
+                    dic['camera_name'] = obj.camera_id.name
+                    raw_data.append(dic)
+
     elif(type == 'month'):
         no_of_months = 5
         today = timezone.now().date()
@@ -554,6 +566,16 @@ def get_anlytics_data(request ,id , org_id ,  type=None , camera_id = None ):
             time_list.append(first_date.strftime("%b %Y"))
             count_list.append(count)
             first_date = monthdelta(first_date , 1)
+
+            if (analytic_obj):
+                for obj in analytic_obj:
+                    dic = {}
+                    dic['count'] = cou
+                    cou += 1
+                    dic['date'] = obj.timestamp.strftime("%d %b %Y ")
+                    dic['time'] = obj.timestamp.strftime("%I:%M:%S %p")
+                    dic['camera_name'] = obj.camera_id.name
+                    raw_data.append(dic)
     else:
         print('in hour')
         no_of_hours = 8
@@ -574,82 +596,19 @@ def get_anlytics_data(request ,id , org_id ,  type=None , camera_id = None ):
             count_list.append(count)
             first_date += datetime.timedelta(hours=1)
 
+            if (analytic_obj):
+                for obj in analytic_obj:
+                    dic = {}
+                    dic['count'] = cou
+                    cou += 1
+                    dic['date'] = obj.timestamp.strftime("%d %b %Y ")
+                    dic['time'] = obj.timestamp.strftime("%I:%M:%S %p")
+                    dic['camera_name'] = obj.camera_id.name
+                    raw_data.append(dic)
+
     print(time_list , count_list)
 
-    return [time_list , count_list , camera_name]
-
-
-#
-# def get_anlytics_data(request ,id , api_key ,  type=None , camera_id = None ):
-#     user_obj = User.objects.get(id=id)
-#     time_list = []
-#     count_list = []
-#     # print(id , type)
-#     print(camera_id , api_key , type)
-#     org_obj = Organisation.objects.get(api_key=api_key)
-#     camera_status = 0
-#     if camera_id is None:
-#         camera_status=1
-#         camera_nam = "All cameras"
-#     else:
-#         camera_obj = Camera.objects.get(name=camera_id ,org_id = org_obj.id )
-#         camera_name = camera_id
-#
-#     if(type is None or type =='Last 7 days'):
-#         print('Last 7 days')
-#         no_of_days = 7
-#         today = timezone.now().date()
-#         first_date = today - datetime.timedelta(days=no_of_days - 1)
-#         for i in range(no_of_days):
-#             analytic_obj = Analytics.objects.filter(user=user_obj , timestamp__date = first_date ,camera_id = camera_obj)
-#             if(camera_status):
-#                 analytic_obj = Analytics.objects.filter(user=user_obj, timestamp__date=first_date)
-#             print(analytic_obj)
-#             count = analytic_obj.count()
-#             time_list.append(first_date.strftime("%d %b"))
-#             count_list.append(count)
-#             first_date += datetime.timedelta(days =1)
-#     elif(type == 'Last 6 months'):
-#         print('Last 6 months')
-#         no_of_months = 6
-#         today = timezone.now().date()
-#         print(today.today())
-#         first_date = monthdelta(today.today() , -no_of_months)
-#         print(first_date)
-#         for i in range(no_of_months +1 ):
-#             month = first_date.monthh
-#             year = first_date.year
-#             analytic_obj = Analytics.objects.filter(user=user_obj,  timestamp__month=month, timestamp__year=year , camera_id = camera_obj)
-#             if(camera_status):
-#                 analytic_obj = Analytics.objects.filter(user=user_obj, timestamp__month=month, timestamp__year=year)
-#             count = analytic_obj.count()
-#             time_list.append(first_date.strftime("%b"))
-#             count_list.append(count)
-#             first_date = monthdelta(first_date , 1)
-#     else:
-#         print('in hour')
-#         no_of_hours = 8
-#         today = timezone.now()
-#         print(today)
-#         first_date = today - datetime.timedelta(hours=7)
-#         print(first_date)
-#         # print((first_date.hour))
-#         for i in range(no_of_hours):
-#             hour = first_date.hour
-#             analytic_obj = Analytics.objects.filter(user=user_obj , timestamp__hour = first_date.hour ,
-#                                             timestamp__date = first_date.date() ,camera_id = camera_obj)
-#             if(camera_status):
-#                 analytic_obj = Analytics.objects.filter(user=user_obj, timestamp__hour=first_date.hour,
-#                                                         timestamp__date=first_date.date())
-#             count = analytic_obj.count()
-#             time_list.append(first_date.strftime("%I%p"))
-#             count_list.append(count)
-#             first_date += datetime.timedelta(hours=1)
-#
-#     print(time_list , count_list)
-#
-#     return [time_list , count_list , camera_name]
-
+    return [time_list , count_list , camera_name , raw_data]
 
 @login_required
 @csrf_exempt
@@ -666,7 +625,7 @@ def get_analytics(request):
         data['id'] = id
         data['name'] = user_obj.first_name + ' ' + user_obj.last_name
         result = get_anlytics_data(request , id ,org_id, type=type , camera_id=camera_id)
-        return JsonResponse({'status': 200 , 'count_list': result[1] , 'time_list' : result[0] ,'data' :data , 'camera_name' : result[2]})
+        return JsonResponse({'status': 200 , 'count_list': result[1] , 'time_list' : result[0] ,'data' :data , 'camera_name' : result[2] , 'raw_data' : result[3]})
 
 
 @login_required
@@ -680,12 +639,13 @@ def overall_analytics(request):
         camera_id = request.POST.get('camera_id')
         org_id = request.POST.get('org_id')
         type = request.POST.get('type')
+        print(from_date , to_date , camera_id , type)
         user_list = []
         data = []
         from_date = datetime.datetime.strptime(from_date, "%Y-%m-%d").date()
         to_date = datetime.datetime.strptime(to_date, "%Y-%m-%d").date()
         org_obj = Organisation.objects.get(id = org_id)
-        if(camera_id is None):
+        if(camera_id == 'All'):
             obj = Analytics.objects.filter(timestamp__range=(
                 datetime.datetime.combine(from_date, datetime.time.min),
                 datetime.datetime.combine(to_date, datetime.time.max),
@@ -714,41 +674,59 @@ def overall_analytics(request):
                         temp['type']  = "Staff"
                     temp['count'] = obj.filter(user = item.user).count()
 
-                    if(type == '0'):
-                        if (temp['type'] == 'Staff'):
+                    print(type , temp['type'])
+                    if(type == 'Staff' and temp['type'] == 'Staff'):
                             data.append(temp)
-                    elif(type == '1'):
-                        if(temp['type']=='Staff'):
+                    elif(type == 'Candidate' and temp['type'] == 'Candidate'):
                             data.append(temp)
-                    else:
+                    elif(type =='All'):
                         data.append(temp)
+                    else:
+                        pass
                     count +=1
                     # count_list.append(obj.filter(user = item.user).count())
-            # print(data)
+        print(data)
 
         #for unique persons in each day
-        unique_user_list = []
+        print('Unique persons')
         time_list = []
         count_list = []
         while(from_date <= to_date):
-            if(camera_id is None):
+            unique_user_list = []
+            if(camera_id == 'All'):
                 obj = Analytics.objects.filter(timestamp__date = from_date )
             else:
                 camera_obj = Camera.objects.get(name=camera_id)
                 obj = Analytics.objects.filter(timestamp__date = from_date  , camera_id = camera_obj )
             count = 0
+            print(obj)
             for item in obj:
                 username = item.user.username
-                user_details_obj = UserDetails.objects.filter(user=item.user, org_id=org_obj).first()
+                user_details_obj = UserDetails.objects.filter(user=item.user, org_id=org_obj)
+                if(type=="Staff"):
+                    user_details_obj = user_details_obj.filter(privilege = 2)
+                elif(type == 'Candidate'):
+                    user_details_obj = user_details_obj.filter(privilege=3)
+                else:
+                    pass
                 if user_details_obj:
                     if username not in unique_user_list:
+                        # if(type=='Staff' and user_details_obj.privilege == 2):
+                        #     unique_user_list.append(username)
+                        #     count += 1
+                        # elif(type == 'Candidate' and user_details_obj.privilege == 3):
+                        #     unique_user_list.append(username)
+                        #     count += 1
+                        # else:
                         unique_user_list.append(username)
                         count += 1
+
             time_list.append(from_date.strftime("%d %b"))
             count_list.append(count)
             unique_user_list = []
             from_date += datetime.timedelta(days=1)
-        return JsonResponse({'count_list': count_list , 'time_list' :time_list , 'data': data})
+        print(time_list , count_list)
+        return JsonResponse({'count_list': count_list , 'time_list' :time_list , 'data': data , 'status' : 200})
 
     user  = User.objects.get(username = request.user)
     obj = UserDetails.objects.get(user = user)
