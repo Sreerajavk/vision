@@ -9,4 +9,5 @@ urlpatterns = [
         path('get_user_analytics/' , views.get_analytics),
         path('get_overall_analytics/' , views.overall_analytics),
         path('edit_profile/' , views.edit_profile),
+        path('edit_profile_picture/' , views.edit_profile_picture)
 ]

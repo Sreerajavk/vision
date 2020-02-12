@@ -1,7 +1,8 @@
 import calendar
 import datetime
 import json
-
+from django.core.files.storage import default_storage
+from vision.settings import BASE_DIR
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -219,35 +220,33 @@ def overall_analytics(request):
                 datetime.datetime.combine(to_date, datetime.time.max),
             ), camera_id = camera_obj )
 
-        # count = 1
-        # for item in obj:
-        #     username = item.user.username
-        #     user_details_obj = UserDetails.objects.filter(user = item.user , org_id = org_obj).first()
-        #     if user_details_obj:
-        #         if username not in user_list:
-        #             user_list.append(username)
-        #             temp = {}
-        #             temp['no']  = count
-        #             temp['id'] = item.user.id
-        #             temp['name'] = item.user.first_name + ' ' + item.user.last_name
-        #             temp['image_url'] = user_details_obj.pic.url
-        #             temp['type'] = "Candidate"
-        #             if(user_details_obj.privilege == 2):
-        #                 temp['type']  = "Staff"
-        #             temp['count'] = obj.filter(user = item.user).count()
-        #
-        #             print(type , temp['type'])
-        #             if(type == 'Staff' and temp['type'] == 'Staff'):
-        #                     data.append(temp)
-        #             elif(type == 'Candidate' and temp['type'] == 'Candidate'):
-        #                     data.append(temp)
-        #             elif(type =='All'):
-        #                 data.append(temp)
-        #             else:
-        #                 pass
-        #             count +=1
-        #             # count_list.append(obj.filter(user = item.user).count())
-        # print(data)
+        count = 1
+        for item in obj:
+            username = item.user.username
+            user_details_obj = UserDetails.objects.filter(user = item.user , org_id = org_obj).filter(privilege=3).first()
+            if user_details_obj:
+                if username not in user_list:
+                    user_list.append(username)
+                    temp = {}
+                    temp['no']  = count
+                    temp['email'] = item.user.username
+                    temp['name'] = item.user.first_name + ' ' + item.user.last_name
+                    temp['image_url'] = user_details_obj.pic.url
+                    temp['type'] = "Candidate"
+                    temp['count'] = obj.filter(user = item.user).count()
+
+                    print(type , temp['type'])
+                    if(type == 'Staff' and temp['type'] == 'Staff'):
+                            data.append(temp)
+                    elif(type == 'Candidate' and temp['type'] == 'Candidate'):
+                            data.append(temp)
+                    elif(type =='All'):
+                        data.append(temp)
+                    else:
+                        pass
+                    count +=1
+                    # count_list.append(obj.filter(user = item.user).count())
+        print(data)
 
         #for unique persons in each day
         unique_user_list = []
@@ -296,3 +295,18 @@ def edit_profile(request):
         user_obj.save()
 
         return JsonResponse({'status': 200})
+
+
+@csrf_exempt
+def edit_profile_picture(request):
+    if(request.method == 'POST'):
+
+        print(request.FILES)
+        username = request.GET.get('username')
+        print(username)
+        user_obj   = User.objects.get(username = username)
+        user_details_obj = UserDetails.objects.get(user = user_obj)
+        default_storage.delete(BASE_DIR + user_details_obj.pic.url)
+        user_details_obj.pic = request.FILES.get('file')
+        user_details_obj.save()
+        return JsonResponse({'status': 200 , 'image_url':user_details_obj.pic.url})

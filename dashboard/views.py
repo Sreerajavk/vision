@@ -2,7 +2,7 @@ import calendar
 import string
 import datetime
 from django.utils  import timezone
-
+from django.core.files.storage import default_storage
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -16,6 +16,7 @@ from django.shortcuts import render, redirect
 from django.template.loader import get_template
 from django.utils.crypto import get_random_string
 
+from vision.settings import BASE_DIR
 from .forms import ImageForm
 from .models import *
 
@@ -183,7 +184,7 @@ def verify_staff(request , token , email ,org_id):
     if verify_obj:
         verify_obj = verify_obj.first()
         if(verify_obj.visited):
-            return redirect('/login')
+            return redirect('/login/')
         else:
             verify_obj.visited = True
             verify_obj.save()
@@ -198,7 +199,7 @@ def error_page(request ):
 
 def staff_signup(request):
     # print(request.META.get('HTTP_REFERER'))
-
+    print('ksjdfhskjdh')
 
     if(request.method == 'POST'):
 
@@ -232,7 +233,7 @@ def staff_signup(request):
     email = request.GET.get('email')
     org_id = request.GET.get('org_id')
     # print(email)
-    user_obj  = User.objects.filter(email = email)
+    user_obj  = StaffVerification.objects.filter(email = email)
     print(user_obj)
     if user_obj:
         return  render(request , 'staffSignup.html' , {'email': email , 'org_id':org_id})
@@ -349,8 +350,17 @@ def delete_staff(request):
         type = request.POST.get('type')
         org_id = request.POST.get('org_id')
         # print(id , org_id , type)
-        User.objects.filter(id = id).delete()
+        u = (User.objects.get(id=id))
+        user_obj = UserDetails.objects.get(user = User.objects.get(id = id))
+        default_storage.delete(BASE_DIR + user_obj.pic.url)
+
+        #deleting candidate pics collected for training
+        pic_obj = CandidatePics.objects.filter(user = u)
+        for obj in pic_obj:
+            default_storage.delete(BASE_DIR + obj.images.url)
+
         org_obj = Organisation.objects.get(id = org_id )
+        User.objects.filter(id=id).delete()
         if(int(type) == 0 ):
             user_obj = UserDetails.objects.filter(org_id = org_obj , privilege = 3)
         else:
@@ -417,6 +427,7 @@ def delete_images(request):
     if(request.is_ajax()):
         id = request.POST.get('id')
         pic_obj = CandidatePics.objects.get(id = id)
+        default_storage.delete(BASE_DIR + pic_obj.images.url)
         pic_obj.delete()
         return JsonResponse({'status': 200  , 'id' : id})
 
