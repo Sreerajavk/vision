@@ -37,7 +37,8 @@ def get_pic(request):
 #the dashboard page
 @login_required
 def dashboard(request):
-    return render(request , 'dashboard.html' , {'pic' : get_pic(request) })
+    print(request.user.username)
+    return render(request , 'dashboard.html' , {'pic' : get_pic(request) , 'username' :request.user.username })
 
 @csrf_exempt
 def add_organisation(request):

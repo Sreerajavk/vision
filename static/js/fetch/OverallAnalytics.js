@@ -33,6 +33,7 @@ $(document.body).on('click', '#search_bt', function (event) {
         },
         fail: function (response) {
             $('#search_bt').html('Search<i class="fas fa-search"></i>');
+
         }
 
     })
