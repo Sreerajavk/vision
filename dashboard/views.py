@@ -37,8 +37,41 @@ def get_pic(request):
 #the dashboard page
 @login_required
 def dashboard(request):
-    print(request.user.username)
-    return render(request , 'dashboard.html' , {'pic' : get_pic(request) , 'username' :request.user.username })
+    # print(request.user.username)
+    user_obj = User.objects.get(username=request.user)
+    user_details_obj = UserDetails.objects.get(user = user_obj)
+    org_obj = user_details_obj.org_id
+    user_obj = UserDetails.objects.filter(org_id=org_obj)
+    staff_list = []
+    candidate_list = []
+    for user in user_obj:
+        temp = {}
+        temp['name'] = user.user.first_name + ' ' + user.user.last_name
+        temp['username'] = user.user.username
+        temp['image_url'] = user.pic.url
+        temp['phone'] = user.phone
+        if(user.privilege == 2):
+            staff_list.append(temp)
+        else:
+            candidate_list.append(temp)
+    return render(request , 'dashboard.html' , {'pic' : get_pic(request) , 'username' :request.user.username ,
+                'staff_list' : staff_list , 'candidate_list' : candidate_list, 'org_name': org_obj.name})
+
+@csrf_exempt
+@login_required
+def add_camera(request):
+
+    if(request.method == 'POST'):
+        camera_name = request.POST.get('camera_name')
+        user_obj = User.objects.get(username=request.user)
+        user_details_obj = UserDetails.objects.get(user=user_obj)
+        org_obj = user_details_obj.org_id
+        camera_obj = Camera.objects.create(name = camera_name , org_id = org_obj )
+        camera_obj.save()
+        return JsonResponse({'status': 200})
+
+
+    return render(request, 'AddCamera.html' , {'pic' : get_pic(request)})
 
 @csrf_exempt
 def add_organisation(request):

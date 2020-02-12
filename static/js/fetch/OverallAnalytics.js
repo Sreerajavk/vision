@@ -27,12 +27,12 @@ $(document.body).on('click', '#search_bt', function (event) {
             // alert('sjhfdksjdh')
             fill_chart(response);
             fill_table(response, true);
-            $('#search_bt').html('Search<i class="fas fa-search"></i>');
+            $('#search_bt').html('Search<i class="fas fa-search" style="margin-left:10px"></i>');
 
 
         },
         fail: function (response) {
-            $('#search_bt').html('Search<i class="fas fa-search"></i>');
+            $('#search_bt').html('Search<i class="fas fa-search" style="margin-left:10px"></i>');
 
         }
 

@@ -15,6 +15,7 @@ urlpatterns = [
     path('get-analytics/', views.get_analytics),
     path('overall-analytics/' , views.overall_analytics),
     path('filter-type/', views.filter_type),
+    path('add-camera/' , views.add_camera),
     re_path('edit-candidate/(?P<id>[0-9]+)', views.edit_candidate),
     re_path('verify-staff/(?P<token>[0-9a-zA-Z]+)/(?P<email>[0-9a-zA-Z@._]+)/(?P<org_id>[0-9]+)', views.verify_staff,
             name='activate')

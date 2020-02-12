@@ -109,6 +109,11 @@
 
 
                     </li>
+                <li>
+                        <a href="/dashboard/add-camera/" aria-expanded="false"><i
+                                class="icon nalika-eye icon-wrap"></i>
+                            <span class="mini-click-non {% if request.path == '/dashboard/add-camera/' %}highlight{% endif %}">Add Camera</span></a>
+                    </li>
                     <li>
                         <a href="/dashboard/analytics/" aria-expanded="false"><i
                                 class="icon nalika-analytics icon-wrap"></i>
@@ -208,7 +213,9 @@
                             <nav id="dropdown">
                                 <ul class="mobile-menu-nav">
                                     <li>
-                                        <a data-toggle="collapse" data-target="#Charts" href="#"> <i class="icon nalika-user icon-wrap" style="margin-right: 5px;"></i>Add Members
+                                        <a data-toggle="collapse" data-target="#Charts" href="#"> <i
+                                                class="icon nalika-user icon-wrap" style="margin-right: 5px;"></i>Add
+                                            Members
 
                                             <span class="admin-project-icon nalika-icon nalika-down-arrow"></span></a>
                                         <ul class="collapse dropdown-header-top">
@@ -248,6 +255,59 @@
 
 
         {% block content %}
+            <div class="product-status mg-b-30" style="margin-top: 100px;" id="div2">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="product-status-wrap">
+                                {% csrf_token %}
+                                <h4 id="div_head" style="text-align: center;">{{ org_name }}</h4>
+                                <h4 id="div_head" style="text-align: left;margin-top: 20px;">Staffs</h4>
+                                <table>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Username/email</th>
+                                        <th>Phone No</th>
+                                    </tr>
+                                    <tbody id="staff_content">
+
+                                    {% for user in staff_list %}
+                                        <tr>
+                                            <td><img src="{{ user.image_url }}"/></td>
+                                            <td>{{ user.name }}</td>
+                                            <td>{{ user.username }}</td>
+                                            <td>{{ user.phone }}</td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                                <h4 id="div_head" style="text-align: left;margin-top: 20px;">Candidates</h4>
+                                <table>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>Phone No</th>
+                                    </tr>
+                                    <tbody id="candidate_content">
+                                    {% for user in candidate_list %}
+                                        <tr>
+                                            <td><img src="{{ user.image_url }}"/></td>
+                                            <td>{{ user.name }}</td>
+                                            <td>{{ user.username }}</td>
+                                            <td>{{ user.phone }}</td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% endblock %}
 
     </div>
