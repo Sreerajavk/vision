@@ -41,7 +41,7 @@ def dashboard(request):
     user_obj = User.objects.get(username=request.user)
     user_details_obj = UserDetails.objects.get(user = user_obj)
     org_obj = user_details_obj.org_id
-    user_obj = UserDetails.objects.filter(org_id=org_obj)
+    user_obj = UserDetails.objects.exclude(privilege = 1).filter(org_id=org_obj)
     staff_list = []
     candidate_list = []
     for user in user_obj:
