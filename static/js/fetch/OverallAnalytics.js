@@ -10,6 +10,7 @@ $(document.body).on('click', '#search_bt', function (event) {
         alert('Select to date');
         return
     }
+    $('#search_bt').html('Searching  <img src="/static/images/spinner2.gif" style="width: 30px;height: 30px;">');
 
     $.ajax({
         url: '/dashboard/overall-analytics/',
@@ -26,10 +27,12 @@ $(document.body).on('click', '#search_bt', function (event) {
             // alert('sjhfdksjdh')
             fill_chart(response);
             fill_table(response, true);
+            $('#search_bt').html('Search<i class="fas fa-search"></i>');
+
 
         },
         fail: function (response) {
-
+            $('#search_bt').html('Search<i class="fas fa-search"></i>');
         }
 
     })
@@ -105,13 +108,13 @@ function fill_table(response, status) {
     if (status) {
 
         // $('#full_table').slideUp(500, function () {
-            table_content.innerHTML = "";
-            for (user of response.data) {
-                let row = `<tr id="${user.id}" class="table-row"><td>${user.no}</td><td>${user.name}</td><td><img src="${user.image_url}" id="table-image"></td><td>${user.type}</td><td>${user.count}</td></tr>`
-                table_content.innerHTML += row;
-            }
+        table_content.innerHTML = "";
+        for (user of response.data) {
+            let row = `<tr id="${user.id}" class="table-row"><td>${user.no}</td><td>${user.name}</td><td><img src="${user.image_url}" id="table-image"></td><td>${user.type}</td><td>${user.count}</td></tr>`
+            table_content.innerHTML += row;
+        }
 
-            $('#full_content').slideDown(500);
+        $('#full_content').slideDown(500);
         // })
     } else {
         $('#full_content').slideDown(500);
