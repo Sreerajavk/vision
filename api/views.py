@@ -316,13 +316,15 @@ def add_analytics(request):
     # print("In analytics")
     # return JsonResponse({'status' :'Success'})
     if(request.method == 'POST'):
+        # print(request.POST)
         timestamp = request.POST.get('timestamp')
         user_id = request.POST.get('userid')
         camera_id = request.POST.get('cameraid')
 
-        user_obj = User.objects.get(id=user_id);
-        camera_obj = Camera.objects.get(id = camera_id)
+        print(timestamp , user_id , camera_id)
 
-        obj = Analytics.objects.create(user = user_obj , timstamp = timestamp , camera_id = camera_obj)
+        user_obj = User.objects.get(id=user_id)
+        camera_obj = Camera.objects.get(id = camera_id)
+        obj = Analytics.objects.create(user = user_obj , timestamp = timestamp , camera_id = camera_obj)
         obj.save()
         return JsonResponse({"Status" : 200})
