@@ -313,5 +313,6 @@ def edit_profile_picture(request):
 
 @csrf_exempt
 def add_anaylytics(request):
+    print("In analytics")
     if(request.method == 'POST'):
         print(request.POST)
