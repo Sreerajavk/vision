@@ -316,9 +316,9 @@ def add_analytics(request):
     # print("In analytics")
     # return JsonResponse({'status' :'Success'})
     if(request.method == 'POST'):
-        timestamp = request.POST.get('time_stamp')
-        user_id = request.POST.get('user_id')
-        camera_id = request.POST.get('camera_id')
+        timestamp = request.POST.get('timestamp')
+        user_id = request.POST.get('userid')
+        camera_id = request.POST.get('cameraid')
 
         user_obj = User.objects.get(id=user_id);
         camera_obj = Camera.objects.get(id = camera_id)
