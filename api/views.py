@@ -310,3 +310,8 @@ def edit_profile_picture(request):
         user_details_obj.pic = request.FILES.get('file')
         user_details_obj.save()
         return JsonResponse({'status': 200 , 'image_url':user_details_obj.pic.url})
+
+@csrf_exempt
+def add_anaylytics(request):
+    if(request.method == 'POST'):
+        print(request.POST)
