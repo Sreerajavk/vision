@@ -313,5 +313,16 @@ def edit_profile_picture(request):
 
 @csrf_exempt
 def add_analytics(request):
-    print("In analytics")
-    return JsonResponse({'status' :'Success'})
+    # print("In analytics")
+    # return JsonResponse({'status' :'Success'})
+    if(request.method == 'POST'):
+        timestamp = request.POST.get('time_stamp')
+        user_id = request.POST.get('user_id')
+        camera_id = request.POST.get('camera_id')
+
+        user_obj = User.objects.get(id=user_id);
+        camera_obj = Camera.objects.get(id = camera_id)
+
+        obj = Analytics.objects.create(user = user_obj , timstamp = timestamp , camera_id = camera_obj)
+        obj.save()
+        return JsonResponse({"Status" : 200})
