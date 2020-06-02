@@ -144,7 +144,6 @@ EMAIL_HOST_PASSWORD = 'sreejith123'
 LOGIN_URL = '/login/'
 
 
-CSRF_COOKIE_SECURE = False
 
 
 # EMAIL_USE_TLS = True
