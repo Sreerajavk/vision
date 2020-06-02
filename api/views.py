@@ -314,5 +314,4 @@ def edit_profile_picture(request):
 @csrf_exempt
 def add_analytics(request):
     print("In analytics")
-    if(request.method == 'POST'):
-        print(request.POST)
+    return JsonResponse({'status' :'Success'})
