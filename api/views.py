@@ -312,7 +312,7 @@ def edit_profile_picture(request):
         return JsonResponse({'status': 200 , 'image_url':user_details_obj.pic.url})
 
 @csrf_exempt
-def add_anaylytics(request):
+def add_analytics(request):
     print("In analytics")
     if(request.method == 'POST'):
         print(request.POST)
