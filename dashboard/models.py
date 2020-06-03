@@ -42,7 +42,7 @@ class CandidatePics(models.Model):
 
 class UserEmbeddings(models.Model):
     user = models.ForeignKey(to=User , on_delete=models.CASCADE)
-    embedding = models.TextField(max_length=500)
+    embedding = models.TextField(max_length=5000)
 
 
 
