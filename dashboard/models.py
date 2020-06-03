@@ -40,6 +40,11 @@ class CandidatePics(models.Model):
     user = models.ForeignKey(to = User , on_delete = models.CASCADE)
     images = models.FileField(upload_to = 'candidates')
 
+class UserEmbeddings(models.Model):
+    user = models.ForeignKey(to=User , on_delete=models.CASCADE)
+    embedding = models.TextField(max_length=500)
+
+
 
 
 
