@@ -324,8 +324,10 @@ def add_analytics(request):
 
         print(timestamp , user_id , camera_id)
 
-        user_obj = User.objects.get(id=user_id)
-        camera_obj = Camera.objects.get(id = camera_id)
-        obj = Analytics.objects.create(user = user_obj , timestamp = timestamp , camera_id = camera_obj)
+        camera_obj = Camera.objects.get(id=camera_id)
+        user_obj = User.objects.filter(id=user_id).first()
+        if not user_obj:
+            user_obj = User.objects.get(id=3)
+        obj = Analytics.objects.create(user=user_obj, timestamp=timestamp, camera_id=camera_obj)
         obj.save()
         return JsonResponse({"Status" : 200})
