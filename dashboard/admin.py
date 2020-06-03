@@ -26,6 +26,9 @@ class AdminCamera(admin.ModelAdmin):
 class AdminCandidatePic(admin.ModelAdmin):
     list_display = ( 'user','images',)
 
+class AdminUserEmbedding(admin.ModelAdmin):
+    list_display = ( 'user' , 'embedding')
+
 
 admin.site.register(StaffVerification , AdminStaffVerification)
 admin.site.register(Organisation , AdminOrganisation)
@@ -33,3 +36,4 @@ admin.site.register(Camera , AdminCamera)
 admin.site.register(Analytics , AdminAnalytics)
 admin.site.register(UserDetails , AdminUserDetails)
 admin.site.register(CandidatePics , AdminCandidatePic)
+admin.site.register(UserEmbeddings , AdminUserEmbedding)
