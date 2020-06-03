@@ -320,6 +320,7 @@ def add_analytics(request):
         timestamp = request.POST.get('timestamp')
         user_id = request.POST.get('userid')
         camera_id = request.POST.get('cameraid')
+        embedding = request.POST.get('embedding')
 
         print(timestamp , user_id , camera_id)
 
