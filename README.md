@@ -147,12 +147,12 @@ Provide the parameters given below.
     "status": 200,
     "data" : 
     [
-        [01 Jun, 02 Jun, 03 Jun, 04 Jun, 05 Jun, 06 Jun, 07 Jun],
+        ["01 Jun", "02 Jun", "03 Jun", "04 Jun", "05 Jun", "06 Jun", "07 Jun"],
         [0, 0, 0, 0, 12, 0, 0]],
-        raw_data: 
+        "raw_data": 
         [
             {
-                "time_stamp": "05 Jun 2020 09:48:29 PM"
+                "time_stamp": "05 Jun 2020 09:48:29 PM",
                 "camera_name": "camera1"
             },
         ]
@@ -247,15 +247,15 @@ Provide the parameters given below.
 ```json
 {
     "count_list": [0, 0, 0, 0, 0, 1, 0, 0],
-    "time_list": [31 May, 01 Jun, 02 Jun, 03 Jun, 04 Jun, 05 Jun, 06 Jun, 07 Jun],
+    "time_list": ["31 May", "01 Jun", "02 Jun", "03 Jun", "04 Jun", "05 Jun", "06 Jun", "07 Jun"],
     "data": 
     [
         {
             "no": 1,
-            "email": test,
-            "name": Test ,
-            "image_url": /media/pictures/rahul.jpg,
-            "type": Candidate,
+            "email": "test",
+            "name": "Test" ,
+            "image_url": "/media/pictures/rahul.jpg",
+            "type": "Candidate",
             "count": 12
         }
     ],
@@ -287,7 +287,7 @@ Provide the parameters given below.
 ```json
 {
     "username"   : "username",
-    "file"       : BYTE_STREAM, 
+    "file"       : "BYTE_STREAM", 
     "api_key"    : "api_key"
 }
 ```
@@ -331,7 +331,7 @@ Provide the parameters given below.
 
 ```json
 {
-    "embedding"   :  EMBEDDING_LIST,
+    "embedding"   : "EMBEDDING_LIST",
     "camera_id"   : "camera_id", 
     "api_key"     : "api_key",
     "time_stamp"  : "time_stamp"
