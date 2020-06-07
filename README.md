@@ -148,14 +148,15 @@ Provide the parameters given below.
     "data" : 
     [
         ["01 Jun", "02 Jun", "03 Jun", "04 Jun", "05 Jun", "06 Jun", "07 Jun"],
-        [0, 0, 0, 0, 12, 0, 0]],
-        "raw_data": 
-        [
-            {
-                "time_stamp": "05 Jun 2020 09:48:29 PM",
-                "camera_name": "camera1"
-            },
-        ]
+        [0, 0, 0, 0, 12, 0, 0]
+    ],
+    "raw_data": 
+    [
+        {
+             "time_stamp": "05 Jun 2020 09:48:29 PM",
+             "camera_name": "camera1"
+         },
+    ]
 }
 ```
 
