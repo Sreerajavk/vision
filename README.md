@@ -318,7 +318,7 @@ Provide the parameters given below.
 
 ## ADD ANALYTICS
 
-**URL** : `/api/add_anlytics/`
+**URL** : `/api/add_analytics/`
 
 **Method** : `POST`
 
